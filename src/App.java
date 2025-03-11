@@ -1,4 +1,5 @@
 
+import br.com.CDB.BancoDigital.view.CartaoView;
 import br.com.CDB.BancoDigital.view.ClienteView;
 import br.com.CDB.BancoDigital.view.ContaView;
 import br.com.CDB.BancoDigital.view.MenuView;
@@ -10,10 +11,12 @@ public class App {
 
         ClienteView clienteView = new ClienteView();
         ContaView contaView = new ContaView();
-        MenuView menu = new MenuView(clienteView,contaView);
+        CartaoView cartaoView = new CartaoView();
+        MenuView menu = new MenuView(clienteView,contaView, cartaoView);
 
         clienteView.setMenuView(menu);
         contaView.setMenuView(menu);
+        cartaoView.setMenuView(menu);
 
         menu.iniciarMenu();
 

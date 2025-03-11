@@ -30,8 +30,10 @@ public class CartaoDao {
         return null;
     }
 
-    public List<Cartao> listarCartoes() {
-        return listaDeCartoes;
+     public void listarCartoes() {
+        for(Cartao c : listaDeCartoes) {
+            System.out.println(c); // Exibe todos os clientes
+        }
     }
 
     public boolean atualizarCartao(Cartao cartaoAtualizado) {
@@ -45,7 +47,14 @@ public class CartaoDao {
     }
 
     public boolean removerCartao(int id) {
+        verificarListaClientes();
         return listaDeCartoes.removeIf(cartao -> cartao.getId() == id);
+    }
+
+    private void verificarListaClientes() {
+        if (listaDeCartoes.isEmpty()) {
+            throw new IllegalStateException("Não há clientes cadastrados!");
+        }
     }
 
 

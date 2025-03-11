@@ -28,7 +28,7 @@ public abstract class Cartao {
         this.status = status;
     }
     
-    public abstract void alterarSenha();
+    public abstract void alterarSenha(String novaSenha);
     public abstract void ativarDesativar();
 
     public int getNumeroCartao() {

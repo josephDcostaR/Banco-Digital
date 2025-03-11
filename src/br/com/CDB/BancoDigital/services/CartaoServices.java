@@ -1,70 +1,233 @@
 package br.com.CDB.BancoDigital.services;
 
-import java.util.List;
 import java.util.Scanner;
 
 import br.com.CDB.BancoDigital.Entity.cartao.Cartao;
+import br.com.CDB.BancoDigital.Entity.cartao.CartaoCredito;
+import br.com.CDB.BancoDigital.Entity.cartao.CartaoDebito;
+import br.com.CDB.BancoDigital.Entity.conta.Conta;
 import br.com.CDB.BancoDigital.dao.CartaoDao;
 import br.com.CDB.BancoDigital.dao.ContaDao;
 
 public class CartaoServices {
 
-    CartaoDao cartaoDao = new CartaoDao();
-    ContaDao contaDao = new ContaDao();
-
-    Scanner sc;
+    private CartaoDao cartaoDao;
+    private ContaDao contaDao;
+    private Scanner sc;
 
     public CartaoServices() {
-        this.contaDao = new ContaDao();
+        this.cartaoDao = new CartaoDao();
+        this.contaDao = ContaDao.getInstance();  // Obtendo a instância única
         this.sc = new Scanner(System.in);
     }
 
-
-
+    // Método para solicitar entrada do usuário
     private String solicitarEntrada(String mensagem) {
         System.out.println(mensagem);
         return sc.nextLine().trim();
     }
 
-    // protected int id;
-    // protected int numeroCartao;
-    // protected String senha;
-    // protected boolean status;
-    // protected Conta conta;
-
-    // Registra um cartão após validar regras de negócio
-    public void registrarCartao(Cartao cartao) {
-        
+    public void registrarCartao() {   
         if(contaDao.getTotalContas()== 0) {
             System.out.println("Nenhum conta cadastrado. Não é possível abrir uma conta.");
             return;
         }
 
-        if (cartao.getConta() != null && cartao.getConta().getCartoes().size() >= 2) {
+        int idConta= Integer.parseInt(solicitarEntrada("Digite o ID da conta associada: "));
+        sc.nextLine();
+        Conta conta = contaDao.buscarContaPorId(idConta);
+        
+        if (conta == null) {
+            System.out.println("Erro: Conta não encontrada.");
+            return;
+        }
+        
+        if (conta.getCartoes().size() >= 2) { // Agora verificamos direto na conta
             System.out.println("Erro: A conta já possui o número máximo de cartões.");
             return;
         }
+    
+
+        int numeroDoCartao = Integer.parseInt(solicitarEntrada("Digite o numero do cartão: "));
+        sc.nextLine();
+        String senha = solicitarEntrada("Cadatre a senha do cartão: ");
+
+        System.out.println("""
+            Cartão:
+            1 - Ativo
+            2 - Desativado 
+            """);
+        int status = Integer.parseInt(solicitarEntrada("Qual o Status do cartão"));
+        sc.nextLine();
+        boolean cartaoStatus = (status == 1);
+
+        System.out.println("""
+            Tipo de Cartão:
+            1 - Cartão de Crédito
+            2 - Cartão de Débito 
+            """);
+        int tipoCartao = Integer.parseInt(solicitarEntrada("Insira: "));
+        sc.nextLine();
+
+        Cartao cartao;
+            
+        if (tipoCartao == 1) {
+            double limiteCredito = switch (conta.getClienteAssociado().getCategoria()) { 
+                case COMUM -> 1.000;
+                case SUPER -> 5.000;
+                case PREMIUM -> 10.000;
+            };
+            cartao = new CartaoCredito(numeroDoCartao, senha, cartaoStatus, limiteCredito);
+            } else if (tipoCartao == 2) {
+                double limiteDiario = Double.parseDouble(solicitarEntrada("Qual o limite do cartão hoje:  "));
+                sc.nextLine();
+                cartao = new CartaoDebito(numeroDoCartao, senha, cartaoStatus, limiteDiario);
+            } else {
+                System.out.println("Tipo de cartão inválido.");
+                return;
+            }
+
+
+        conta.adicionarCartao(cartao);
         cartaoDao.registrarCartaoCliente(cartao);
+        System.out.println("Cartão registrado com sucesso");
     }
 
     // Buscar um cartão pelo ID
-    public Cartao buscarCartao(int id) {
-        return cartaoDao.buscarCartaoPorId(id);
+    public void buscarCartao() {
+        int idCartao = Integer.parseInt(solicitarEntrada("Digite o ID do cartao: "));
+        sc.nextLine();
+        System.out.println(cartaoDao.buscarCartaoPorId(idCartao));
+
     }
 
     // Listar todos os cartões
-    public List<Cartao> listarCartoes() {
-        return cartaoDao.listarCartoes();
+    public void exibirCartoes() {
+        cartaoDao.listarCartoes();
     }
 
     // Atualizar um cartão
-    public boolean atualizarCartao(Cartao cartao) {
-        return cartaoDao.atualizarCartao(cartao);
+    public void atualizarCartao() {
+        int idCartao = Integer.parseInt(solicitarEntrada("Digite o ID do cartão que deseja atualizar: "));
+        Cartao cartao = cartaoDao.buscarCartaoPorId(idCartao);
+    
+        if (cartao == null) {
+            System.out.println("Erro: Cartão não encontrado.");
+            return;
+        }
+    
+        System.out.println("O que deseja atualizar?");
+        System.out.println("1 - Número do cartão");
+        System.out.println("2 - Senha");
+        System.out.println("3 - Status do cartão (Ativar/Desativar)");
+        System.out.println("4 - Tipo do Cartão (Somente se necessário)");
+        System.out.println("5 - Cancelar");
+    
+        int escolha = Integer.parseInt(solicitarEntrada("Escolha uma opção: "));
+        
+        switch (escolha) {
+            case 1:
+                int novoNumero = Integer.parseInt(solicitarEntrada("Digite o novo número do cartão: "));
+                cartao.setNumeroCartao(novoNumero);
+                break;
+    
+            case 2:
+                String novaSenha = solicitarEntrada("Digite a nova senha do cartão: ");
+                cartao.setSenha(novaSenha);
+                break;
+    
+            case 3:
+                System.out.println("1 - Ativar\n2 - Desativar");
+                int status = Integer.parseInt(solicitarEntrada("Escolha: "));
+                cartao.setStatus(status == 1);
+                break;
+    
+            case 4:
+                if (cartao instanceof CartaoCredito) {
+                    System.out.println("Alteração de tipo de cartão não é permitida diretamente.");
+                    return;
+                }
+                System.out.println("1 - Cartão de Crédito\n2 - Cartão de Débito");
+                int novoTipo = Integer.parseInt(solicitarEntrada("Escolha: "));
+                
+                Cartao novoCartao;
+                if (novoTipo == 1) {
+                    double novoLimite = Double.parseDouble(solicitarEntrada("Digite o novo limite de crédito: "));
+                    novoCartao = new CartaoCredito(cartao.getNumeroCartao(), cartao.getSenha(), cartao.isStatus(), novoLimite);
+                } else {
+                    double novoLimiteDiario = Double.parseDouble(solicitarEntrada("Digite o novo limite diário: "));
+                    novoCartao = new CartaoDebito(cartao.getNumeroCartao(), cartao.getSenha(), cartao.isStatus(), novoLimiteDiario);
+                }
+                
+                novoCartao.setId(cartao.getId());
+                cartaoDao.atualizarCartao(novoCartao);
+                System.out.println("Cartão atualizado com sucesso!");
+                return;
+    
+            case 5:
+                System.out.println("Operação cancelada.");
+                return;
+    
+            default:
+                System.out.println("Opção inválida.");
+                return;
+        }
+    
+        cartaoDao.atualizarCartao(cartao);
+        System.out.println("Cartão atualizado com sucesso!");
     }
+    
 
     // Remover um cartão pelo ID
-    public boolean removerCartao(int id) {
-        return cartaoDao.removerCartao(id);
+    public void removerCartao() {
+        System.out.println("Qual o ID do cliente buscado: ");
+        int escolhaId = sc.nextInt();
+        sc.nextLine();
+        cartaoDao.removerCartao(escolhaId);
     }
+
+
+    //-------------------------------
+
+    // Método para alterar a senha do cartão
+    public void alterarSenhaCartao() {
+        try {
+            int idCartao = Integer.parseInt(solicitarEntrada("Digite o ID do cartão para alterar a senha: "));
+            Cartao cartao = cartaoDao.buscarCartaoPorId(idCartao);
+    
+            if (cartao == null) {
+                System.out.println("Cartão não encontrado.");
+                return;
+            }
+    
+            String novaSenha = solicitarEntrada("Digite a nova senha: ");
+            cartao.alterarSenha(novaSenha); // Passando a senha como parâmetro
+            cartaoDao.atualizarCartao(cartao);
+            System.out.println("Senha alterada com sucesso!");
+        } catch (NumberFormatException e) {
+            System.out.println("Erro: ID inválido. Digite um número válido.");
+        }
+    }
+    
+
+    // Método para ativar ou desativar um cartão
+    public void ativarDesativarCartao() {
+        try {
+            int idCartao = Integer.parseInt(solicitarEntrada("Digite o ID do cartão para ativar/desativar: "));
+            Cartao cartao = cartaoDao.buscarCartaoPorId(idCartao);
+    
+            if (cartao == null) {
+                System.out.println("Cartão não encontrado.");
+                return;
+            }
+    
+            cartao.ativarDesativar();
+            cartaoDao.atualizarCartao(cartao);
+            System.out.println("Status do cartão alterado com sucesso!");
+        } catch (NumberFormatException e) {
+            System.out.println("Erro: ID inválido. Digite um número válido.");
+        }
+    }
+    
 
 }

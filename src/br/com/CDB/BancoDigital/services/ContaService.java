@@ -11,12 +11,11 @@ import br.com.CDB.BancoDigital.dao.ClienteDao;
 import br.com.CDB.BancoDigital.dao.ContaDao;
 
 public class ContaService {
-    private ContaDao contaDao;
+    ContaDao contaDao = ContaDao.getInstance();
     ClienteDao clienteDao = ClienteDao.getInstance();
     private Scanner sc;
 
     public ContaService() {
-        this.contaDao = new ContaDao();
         this.sc = new Scanner(System.in);
     }
 
@@ -35,6 +34,7 @@ public class ContaService {
         }
 
         int idCliente = Integer.parseInt(solicitarEntrada("Digite o ID do cliente associado: "));
+        sc.nextLine();
         Cliente cliente = clienteDao.encontraCliente(idCliente);
         
         if(cliente == null) {
@@ -49,8 +49,11 @@ public class ContaService {
                 """);
         
         int tipoConta = Integer.parseInt(solicitarEntrada("Insira: "));
+        sc.nextLine();
         int numeroDaConta = Integer.parseInt(solicitarEntrada("Digite o número da conta: "));
+        sc.nextLine();
         BigDecimal saldo = new BigDecimal(solicitarEntrada("Digite o saldo inicial: "));
+        sc.nextLine();
 
         Conta conta;
         if (tipoConta == 1) {

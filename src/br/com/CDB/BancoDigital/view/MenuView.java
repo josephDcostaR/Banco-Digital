@@ -9,11 +9,13 @@ public class MenuView {
 
     ClienteView clienteView = new ClienteView();
     ContaView contaView = new ContaView();
+    CartaoView cartaoView = new CartaoView();
 
-     public MenuView(ClienteView clienteView, ContaView contaView) {
+     public MenuView(ClienteView clienteView, ContaView contaView, CartaoView cartaoView) {
         this.sc = new Scanner(System.in).useLocale(Locale.US);
         this.clienteView = clienteView;
         this.contaView = contaView;
+        this.cartaoView = cartaoView;
     }
 
     public void iniciarMenu() {
@@ -25,6 +27,7 @@ public class MenuView {
                          Banco Digital CVV:
                          1 - Cliente
                          2 - Conta
+                         3 -Cartão
                          """);
                  
                  System.out.print("Escolha uma opção: ");
@@ -38,6 +41,9 @@ public class MenuView {
                         break;
                     case 2:
                         contaView.iniciarConta();
+                        break;
+                    case 3:
+                        cartaoView.iniciarCartao();
                         break;
                   
                     default:
