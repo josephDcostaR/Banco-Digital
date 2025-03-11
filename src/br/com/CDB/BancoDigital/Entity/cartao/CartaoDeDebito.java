@@ -9,9 +9,7 @@ public class CartaoDeDebito extends Cartao {
     public CartaoDeDebito(int numeroCartao, String senha, boolean status, BigDecimal taxaDeManutencao) {
             super(numeroCartao, senha, status);
             this.taxaDeManutencao = taxaDeManutencao;
-        }
-    
-        
+        }  
 
     @Override
     public void alterarSenha() {

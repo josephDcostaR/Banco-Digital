@@ -12,14 +12,13 @@ import br.com.CDB.BancoDigital.dao.ClienteDao;
 
 public class ClienteService {
 
-    private ClienteDao clienteDao;
+    ClienteDao clienteDao = ClienteDao.getInstance();
     private Scanner sc;
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     // Construtor para inicializar o Scanner corretamente
     public ClienteService() {
         this.sc = new Scanner(System.in).useLocale(Locale.US);
-        this.clienteDao = new ClienteDao();
     }
 
     private String solicitarEntrada(String mensagem) {

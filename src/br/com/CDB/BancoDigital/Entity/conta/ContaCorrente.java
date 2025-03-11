@@ -19,19 +19,33 @@ public class ContaCorrente extends Conta {
         System.out.println("Saldo da Conta Corrente " + getNumeroDaConta() + ": R$  " + getSaldo());
     }
 
+    
     @Override
-    public void transferirDinheiro() {
-        System.out.println("Transferência via Pix ainda não implementada.");
+    public void transferirDinheiro(Conta destino, BigDecimal valor) {
+       if (saldo.compareTo(valor) >= 0) {
+        saldo = saldo.subtract(valor);
+        destino.saldo = destino.saldo.add(valor);
+        System.out.println("Transferência de R$ " + valor + " realizada.");  
+       } else {
+        System.out.println("Saldo insuficiente.");
     }
+    }
+    
 
     @Override
     public void calcularTaxaOuRendimento() {
         BigDecimal saldoAtual = getSaldo();
         BigDecimal taxa = BigDecimal.valueOf(taxaDeManutencao);
-        BigDecimal novoSaldo = saldoAtual.subtract(taxa);
-        setSaldo(novoSaldo);
-        System.out.println("Taxa de manutenção de " + taxaDeManutencao + "descontada. Novo saldo: " + novoSaldo);
+    
+        if (saldoAtual.compareTo(taxa) >= 0) {
+            setSaldo(saldoAtual.subtract(taxa));
+            System.out.printf("Taxa de manutenção de R$%.2f descontada. Novo saldo: R$%.2f%n",
+                              taxaDeManutencao, getSaldo());
+        } else {
+            System.out.println("Saldo insuficiente para descontar a taxa de manutenção.");
+        }
     }
+    
 
     public double getTaxaDeManutencao() {
         return taxaDeManutencao;
@@ -41,6 +55,7 @@ public class ContaCorrente extends Conta {
         this.taxaDeManutencao = taxaDeManutencao;
     }
 
+    
   
 
     

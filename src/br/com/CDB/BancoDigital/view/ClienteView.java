@@ -7,14 +7,19 @@ import br.com.CDB.BancoDigital.services.ClienteService;
 
 public class ClienteView {
 
-    ClienteService clienteServices;
+    private ClienteService clienteServices;
+    private MenuView menuView;
     private Scanner sc;
 
     public ClienteView() {
-        this.sc = new Scanner(System.in);
-        this.sc.useLocale(Locale.US);
+        this.sc = new Scanner(System.in).useLocale(Locale.US);
         this.clienteServices = new ClienteService();
     }
+
+    public void setMenuView(MenuView menuView) {
+        this.menuView = menuView;
+    }
+
 
     public void menuCliente() {
         System.out.println("""
@@ -23,6 +28,7 @@ public class ClienteView {
                  2 - Buscar Cliente por Id
                  3 - Exibir todos os clientes
                  4 - Remover um Cliente
+                 5 - Voltar para Menu
                  """);
     }
 
@@ -48,6 +54,9 @@ public class ClienteView {
                         break;
                     case 4:
                         clienteServices.removerCliente();
+                        break;
+                    case 5:
+                        menuView.iniciarMenu();
                         break;
                     default:
                         System.out.println("Opção inválida!");

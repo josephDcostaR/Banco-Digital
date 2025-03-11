@@ -8,23 +8,35 @@ import br.com.CDB.BancoDigital.Entity.conta.Conta;
 public class ContaDao {
 
     List<Conta> listaDeContas = new ArrayList<>();
+    private int idCounter = 1;
 
     public void registrarContaCliente(Conta conta) {
-        conta.setId(listaDeContas.size() + 1);
-        listaDeContas.add(conta);
+        conta.setIdCliente(idCounter++);
+
+        if(listaDeContas.size() < 2) {
+            listaDeContas.add(conta);
+        }else {
+            System.out.println("O cliente já possui o número máximo de contas permitidas.");
+        }
+ 
         // Associa a conta ao cliente (se ainda não estiver associada)
         if (conta.getClienteAssociado() != null) {
             conta.getClienteAssociado().adicionarConta(conta);
         }
     }
 
-    public List<Conta> geContas() {
+    public int getTotalContas() {
+        return listaDeContas.size();
+    }
+    
+
+    public List<Conta> getContas() {
         return listaDeContas;
     }
 
     public Conta buscarContaPorId(int id) {
         for (Conta conta : listaDeContas) {
-            if (conta.getId() == id) {
+            if (conta.getIdCliente() == id) {
                 return conta;
             }
         }

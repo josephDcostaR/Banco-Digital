@@ -23,16 +23,21 @@ public class Cliente {
         this.contas = new ArrayList<>();
     }
 
+    // Construtor que recebe também uma conta (usa o construtor padrão para inicializar 'contas')
     public Cliente(String CPF, String nome, LocalDate dataDeNascimento, String endereco, Categoria categoria, Conta conta) {
+        this();
         this.CPF = CPF;
         this.nome = nome;
         this.dataDeNascimento = dataDeNascimento;
         this.endereco = endereco;
         this.categoria = categoria;
-        this.contas = new ArrayList<>();
+        if(conta != null) {
+            this.adicionarConta(conta);
+        }
     }
 
     public Cliente(String CPF, String nome, LocalDate dataDeNascimento, String endereco, Categoria categoria) {
+        this(); // chama o construtor padrão para inicializar a lista
         this.CPF = CPF;
         this.nome = nome;
         this.dataDeNascimento = dataDeNascimento;
@@ -41,6 +46,9 @@ public class Cliente {
     }
 
     public void adicionarConta(Conta conta) {
+        if (this.contas == null) {
+            this.contas = new ArrayList<>();
+        }
         this.contas.add(conta);
         conta.setClienteAssociado(this);
     }
@@ -93,23 +101,22 @@ public class Cliente {
         this.categoria = categoria;
     }
 
+    
     public List<Conta> getContas() {
         return contas;
     }
-
-    public void setContas(List<Conta> contas) {
-        this.contas = contas;
-    }
-
+    
     @Override
     public String toString() {
+        StringBuilder contasInfo = new StringBuilder();
+        for(Conta conta : contas) {
+            contasInfo.append(conta.getNumeroDaConta()).append(", ");
+        }
+        // Remove a última vírgula, se houver
+        if (contasInfo.length() > 0) {
+            contasInfo.setLength(contasInfo.length() - 2);            
+        }
         return "Cliente [Id=" + Id + ", CPF=" + CPF + ", nome=" + nome + ", dataDeNascimento=" + dataDeNascimento
-                + ", endereco=" + endereco + ", categoria=" + categoria + ", contas=" + contas + "]";
+        + ", endereco=" + endereco + ", categoria=" + categoria + ", contas={" + contasInfo.toString() + "}]";
     }
-
-   
-
-    
-    
-
 }

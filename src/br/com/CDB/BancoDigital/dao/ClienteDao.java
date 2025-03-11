@@ -2,15 +2,28 @@ package br.com.CDB.BancoDigital.dao;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import br.com.CDB.BancoDigital.Entity.cliente.Cliente;
 
 public class ClienteDao {
 
-    List<Cliente> clientes = new ArrayList<>();
+    private static ClienteDao instance;
+    List<Cliente> clientes;
+    private int idCounter = 1;
+
+    private ClienteDao() {
+        this.clientes = new ArrayList<>();
+    }
+
+    //Singleton
+    public static ClienteDao getInstance() {
+        if (instance == null) {
+            instance = new ClienteDao();
+        }
+        return instance;
+    }
 
     public void adicionarClientes(Cliente cliente) {
-        cliente.setId(clientes.size() + 1);
+        cliente.setId(idCounter++);
         clientes.add(cliente);
     }
 
@@ -28,8 +41,11 @@ public class ClienteDao {
             System.out.println(c); // Exibe todos os clientes
         }
     }
-    
 
+    public int getTotalClientes() {
+        return clientes.size();
+    }
+    
     public void deletarCliente(int id) {
         verificarListaClientes();
         clientes.removeIf(c -> c.getId() == id); // Remove sem erro de concorrência

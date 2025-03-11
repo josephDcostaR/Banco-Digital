@@ -12,12 +12,11 @@ import br.com.CDB.BancoDigital.dao.ContaDao;
 
 public class ContaService {
     private ContaDao contaDao;
-    private ClienteDao clienteDao;
+    ClienteDao clienteDao = ClienteDao.getInstance();
     private Scanner sc;
 
     public ContaService() {
         this.contaDao = new ContaDao();
-        this.clienteDao = new ClienteDao();
         this.sc = new Scanner(System.in);
     }
 
@@ -28,9 +27,16 @@ public class ContaService {
 
     public void cadastrarConta() {
         System.out.println("=== Cadastro de Conta ===");
-        int idCliente = Integer.parseInt(solicitarEntrada("Digite o ID do cliente associado: "));
 
+        //Verificar se há clientes cadastrados
+        if(clienteDao.getTotalClientes() == 0) {
+            System.out.println("Nenhum cliente cadastrado. Não é possível abrir uma conta.");
+            return;
+        }
+
+        int idCliente = Integer.parseInt(solicitarEntrada("Digite o ID do cliente associado: "));
         Cliente cliente = clienteDao.encontraCliente(idCliente);
+        
         if(cliente == null) {
             System.out.println("Cliente não encontrado.");
             return;
@@ -43,9 +49,7 @@ public class ContaService {
                 """);
         
         int tipoConta = Integer.parseInt(solicitarEntrada("Insira: "));
-
         int numeroDaConta = Integer.parseInt(solicitarEntrada("Digite o número da conta: "));
-
         BigDecimal saldo = new BigDecimal(solicitarEntrada("Digite o saldo inicial: "));
 
         Conta conta;
@@ -78,7 +82,7 @@ public class ContaService {
 
     public void simularMes() {
         System.out.println("Simulando passagem de um mês...");
-        for(Conta conta : contaDao.geContas() ) 
+        for(Conta conta : contaDao.getContas() ) 
         conta.calcularTaxaOuRendimento();
     }
 

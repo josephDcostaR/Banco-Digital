@@ -1,31 +1,39 @@
 package br.com.CDB.BancoDigital.Entity.conta;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
+import br.com.CDB.BancoDigital.Entity.cartao.Cartao;
 import br.com.CDB.BancoDigital.Entity.cliente.Cliente;
 
 public abstract class Conta {
 
-    private int Id;
-    private int numeroDaConta;
-    private BigDecimal saldo;
-    private Cliente clienteAssociado;
+    protected int IdCliente;
+    protected int numeroDaConta;
+    protected BigDecimal saldo;
+    protected Cliente clienteAssociado;
+    protected List<Cartao> cartoes;
 
-    public Conta(int Id, int numeroDaConta, BigDecimal saldo, Cliente clienteAssociado) {
-        this.Id = Id;
+    public Conta(int IdCliente, int numeroDaConta, BigDecimal saldo, Cliente clienteAssociado) {
+        this.IdCliente = IdCliente;
         this.numeroDaConta = numeroDaConta;
         this.saldo = saldo;
         this.clienteAssociado = clienteAssociado;
+        this.cartoes = new ArrayList<>();
     }
 
     public void associarAoCliente(Cliente cliente) {
         this.clienteAssociado = cliente;
-        cliente.adicionarConta(this);
+        //Evitaando duplicatas
+        if (!cliente.getContas().contains(this)) {
+            cliente.adicionarConta(this);
+        }
     }
 
     public abstract void calcularTaxaOuRendimento();
     public abstract void exibirSaldo();
-    public abstract void transferirDinheiro();
+    public abstract void transferirDinheiro(Conta destino, BigDecimal valor);
 
     public int getNumeroDaConta() {
         return numeroDaConta;
@@ -54,16 +62,33 @@ public abstract class Conta {
     public void setClienteAssociado(Cliente clienteAssociado) {
         this.clienteAssociado = clienteAssociado;
     }
-
-
-    public int getId() {
-        return Id;
+    public int getIdCliente() {
+        return IdCliente;
     }
 
-
-    public void setId(int id) {
-        Id = id;
+    public void setIdCliente(int idCliente) {
+        IdCliente = idCliente;
     }
 
-    
+    public List<Cartao> getCartoes() {
+        return cartoes;
+    }
+
+    public void setCartoes(List<Cartao> cartoes) {
+        this.cartoes = cartoes;
+    }
+
+    public void adicionarCartao(Cartao cartao) {
+        if (cartao != null && !cartoes.contains(cartao)) {
+            cartoes.add(cartao);
+        }
+    }
+
+    @Override
+    public String toString() {
+        String clienteInfo = (clienteAssociado != null) ? clienteAssociado.getNome() : "N/A";
+        return "Conta [Id=" + IdCliente + ", numeroDaConta=" + numeroDaConta + ", saldo=" + saldo + ", clienteAssociado=" + clienteInfo + "]";
+    }
+
+   
 }

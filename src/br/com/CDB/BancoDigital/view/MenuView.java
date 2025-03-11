@@ -3,42 +3,30 @@ package br.com.CDB.BancoDigital.view;
 import java.util.Locale;
 import java.util.Scanner;
 
-import br.com.CDB.BancoDigital.services.ContaService;
+public class MenuView {
 
-public class ContaView {
+    Scanner sc;
 
-    private ContaService contaServices;
-    private MenuView menuView;
-    private Scanner sc;
+    ClienteView clienteView = new ClienteView();
+    ContaView contaView = new ContaView();
 
-      public ContaView() {
+     public MenuView(ClienteView clienteView, ContaView contaView) {
         this.sc = new Scanner(System.in).useLocale(Locale.US);
-        this.contaServices = new ContaService();
+        this.clienteView = clienteView;
+        this.contaView = contaView;
     }
 
-    
-
-    public void setMenuView(MenuView menuView) {
-        this.menuView = menuView;
-    }
-
-
-
-    public void menuConta() {
-        System.out.println("""
-                === Menu da conta ===
-                1 - Cadastrar Conta
-                2 - Exibir Saldos
-                3 - Simular Mes
-                4 - volvar ao menu.
-                """);
-    }
-
-    public void iniciarConta() {
+    public void iniciarMenu() {
 
         while(true) {
                  limparConsole();
-                 menuConta();
+
+                 System.out.println("""
+                         Banco Digital CVV:
+                         1 - Cliente
+                         2 - Conta
+                         """);
+                 
                  System.out.print("Escolha uma opção: ");
                  int escolha = sc.nextInt();
                  System.out.println();
@@ -46,26 +34,20 @@ public class ContaView {
 
                  switch (escolha) {
                     case 1:
-                        contaServices.cadastrarConta();
+                        clienteView.iniciarCliente();
                         break;
                     case 2:
-                        contaServices.exibirSaldos();
+                        contaView.iniciarConta();
                         break;
-                    case 3:
-                        contaServices.simularMes();
-                        break;
-                    case 4:
-                        menuView.iniciarMenu();
-                        break;
+                  
                     default:
                         System.out.println("Opção inválida!");
                 }
                 System.out.println("\nPressione Enter para continuar...");
                 sc.nextLine();
         }
-         
-    }
 
+    }
 
     private void limparConsole() {
         try{

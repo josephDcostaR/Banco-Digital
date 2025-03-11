@@ -1,6 +1,7 @@
 package br.com.CDB.BancoDigital.Entity.conta;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 
 import br.com.CDB.BancoDigital.Entity.cliente.Cliente;
 
@@ -19,20 +20,31 @@ public class ContaPoupanca extends Conta {
     }
 
     @Override
-    public void transferirDinheiro() {
-        System.out.println("Transferência via Pix ainda não implementada.");
+    public void transferirDinheiro(Conta destino, BigDecimal valor) {
+       if (saldo.compareTo(valor) >= 0) {
+        saldo = saldo.subtract(valor);
+        destino.saldo = destino.saldo.add(valor);
+        System.out.println("Transferência de R$ " + valor + " realizada.");  
+       } else {
+        System.out.println("Saldo insuficiente.");
     }
+    }
+    
 
     @Override
     public void calcularTaxaOuRendimento() {
-        BigDecimal saldoAtual = getSaldo(); // Mantém como BigDecimal
-        BigDecimal taxaAnual = BigDecimal.valueOf(getTaxaDeRendimentoAnual()); // Converte double para BigDecimal
-        @SuppressWarnings("deprecation")
-        BigDecimal taxaMensal = taxaAnual.divide(BigDecimal.valueOf(12), 4, BigDecimal.ROUND_HALF_UP); // Taxa mensal
-        BigDecimal rendimento = saldoAtual.multiply(taxaMensal); // Calcula rendimento
-        BigDecimal novoSaldo = saldoAtual.add(rendimento); // Novo saldo
-        setSaldo(novoSaldo); // Atualiza o saldo
-        System.out.println("Rendimento de " + taxaDeRendimentoAnual + "descontada. Novo saldo: " + novoSaldo);
+        BigDecimal saldoAtual = getSaldo();
+        BigDecimal taxaAnual = BigDecimal.valueOf(getTaxaDeRendimentoAnual());
+
+        // Calcula a taxa mensal corretamente
+        BigDecimal taxaMensal = taxaAnual.divide(BigDecimal.valueOf(12), MathContext.DECIMAL128);
+        BigDecimal rendimento = saldoAtual.multiply(taxaMensal);
+        
+        // Atualiza o saldo com o rendimento
+        setSaldo(saldoAtual.add(rendimento));
+
+        System.out.printf("Rendimento de %.2f%% aplicado. Novo saldo: %.2f%n",
+                        getTaxaDeRendimentoAnual(), getSaldo());
     }
 
     public double getTaxaDeRendimentoAnual() {
@@ -42,4 +54,6 @@ public class ContaPoupanca extends Conta {
     public void setTaxaDeRendimentoAnual(double taxaDeRendimentoAnual) {
         this.taxaDeRendimentoAnual = taxaDeRendimentoAnual;
     }
+
+    
 }

@@ -1,11 +1,27 @@
 package br.com.CDB.BancoDigital.Entity.cartao;
 
+
+import br.com.CDB.BancoDigital.Entity.conta.Conta;
+
 public abstract class Cartao {
 
-    private int numeroCartao;
-    private String senha;
-    private boolean status;
+    protected int id;
+    protected int numeroCartao;
+    protected String senha;
+    protected boolean status;
+    protected Conta conta;
 
+    public Cartao(){}
+
+    public Cartao(int numeroCartao, String senha, boolean status, Conta conta) {
+        this.numeroCartao = numeroCartao;
+        this.senha = senha;
+        this.status = status;
+        if(conta != null) {
+           conta.adicionarCartao(this);
+        }
+    }
+    
     public Cartao(int numeroCartao, String senha, boolean status) {
         this.numeroCartao = numeroCartao;
         this.senha = senha;
@@ -14,7 +30,6 @@ public abstract class Cartao {
     
     public abstract void alterarSenha();
     public abstract void ativarDesativar();
-
 
     public int getNumeroCartao() {
         return numeroCartao;
@@ -35,7 +50,20 @@ public abstract class Cartao {
         this.status = status;
     }
 
-    
+    public Conta getConta() {
+        return conta;
+    }
 
+    public void setConta(Conta conta) {
+        this.conta = conta;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
 }
