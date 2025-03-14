@@ -36,11 +36,9 @@ public class ContaPoupanca extends Conta {
         BigDecimal saldoAtual = getSaldo();
         BigDecimal taxaAnual = BigDecimal.valueOf(getTaxaDeRendimentoAnual());
 
-        // Calcula a taxa mensal corretamente
         BigDecimal taxaMensal = taxaAnual.divide(BigDecimal.valueOf(12), MathContext.DECIMAL128);
         BigDecimal rendimento = saldoAtual.multiply(taxaMensal);
         
-        // Atualiza o saldo com o rendimento
         setSaldo(saldoAtual.add(rendimento));
 
         System.out.printf("Rendimento de %.2f%% aplicado. Novo saldo: %.2f%n",

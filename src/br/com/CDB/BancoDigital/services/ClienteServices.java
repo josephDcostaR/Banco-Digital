@@ -5,19 +5,22 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Locale;
-
+import br.com.CDB.BancoDigital.Entity.cliente.CategoriaCliente;
 import br.com.CDB.BancoDigital.Entity.cliente.Cliente;
-import br.com.CDB.BancoDigital.Entity.cliente.Cliente.Categoria;
 import br.com.CDB.BancoDigital.dao.ClienteDao;
+import br.com.CDB.BancoDigital.exceptions.Exceptions;
+import br.com.CDB.BancoDigital.validations.Validations;
 
-public class ClienteService {
+public class ClienteServices {
 
     ClienteDao clienteDao = ClienteDao.getInstance();
     private Scanner sc;
+    private Exceptions exceptions = new Exceptions();
+    private Validations validations = new Validations();
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     // Construtor para inicializar o Scanner corretamente
-    public ClienteService() {
+    public ClienteServices() {
         this.sc = new Scanner(System.in).useLocale(Locale.US);
     }
 
@@ -31,21 +34,34 @@ public class ClienteService {
             System.out.println("=== Cadastro de cliente ===");
 
             String cpf = solicitarEntrada("Insira o CPF: ");
+            exceptions.isStringEmptyField(cpf);
 
-            String nome = solicitarEntrada("Insira o nome: ");
-            if (nome.trim().isEmpty()) {
-                throw new IllegalArgumentException("Nome não pode ser vazio");
+            if (validations.validarCPF(cpf)) {
+                System.out.println("CPF válido!");
+            }else {
+                System.out.println("CPF inválido !");
+                return;
             }
 
+            String nome = solicitarEntrada("Insira o nome: ");
+            exceptions.isStringEmptyField(nome);
+         
             String endereco = solicitarEntrada("Insira o endereço: ");
+            exceptions.isStringEmptyField(endereco);
 
-            Categoria categoria = solicitarcCategoria();
+            CategoriaCliente categoria = solicitarcCategoria();
 
             LocalDate dataNascimento = solicitarDataNascimento();
+            if (validations.validarIdade(dataNascimento)) {
+                System.out.println("Cadastro aprovado !");
+            }else {
+                System.out.println("Cadastro reprovado, cliente menor de idade !");
+                return;
+            }
+           
 
             Cliente cliente = new Cliente(cpf, nome, dataNascimento, endereco, categoria);
             clienteDao.adicionarClientes(cliente);
-            
             System.out.println("Cliente cadastrado com sucesso!");
             
         } catch (IllegalArgumentException e) {
@@ -54,7 +70,7 @@ public class ClienteService {
         
     }
 
-    private Categoria solicitarcCategoria() {
+    private CategoriaCliente solicitarcCategoria() {
         System.out.println("""
             Insira a categoria do cliente:
             1 - COMUM
@@ -66,24 +82,25 @@ public class ClienteService {
             int escolha = Integer.parseInt(sc.nextLine().trim());
         
             return switch (escolha) {
-                case 1 ->  Categoria.COMUM;
-                case 2 ->  Categoria.SUPER;
-                case 3 ->  Categoria.PREMIUM;
+                case 1 ->  CategoriaCliente.COMUM;
+                case 2 ->  CategoriaCliente.SUPER;
+                case 3 ->  CategoriaCliente.PREMIUM;
                 default -> {
                     System.out.println("Opção inválida. Definindo como COMUM por padrão.");
-                    yield Categoria.COMUM;
+                    yield CategoriaCliente.COMUM;
                 }
             };
             
         } catch (NumberFormatException e) {
             System.out.println("Entrada inválida. Definido como COMUM por padrão");
-            return Categoria.COMUM;
+            return CategoriaCliente.COMUM;
         }
         
     }
 
     private LocalDate solicitarDataNascimento() {
         String dataStr = solicitarEntrada("Insira a data de nascimento (dd/MM/yyyy): ");
+        exceptions.isStringEmptyField(dataStr);
         try {
             LocalDate data = LocalDate.parse(dataStr, FORMATTER);
             if (data.isAfter(LocalDate.now())) {

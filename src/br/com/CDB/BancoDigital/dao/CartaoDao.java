@@ -2,27 +2,36 @@ package br.com.CDB.BancoDigital.dao;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import br.com.CDB.BancoDigital.Entity.cartao.Cartao;
 
 public class CartaoDao {
 
-    List<Cartao> listaDeCartoes = new ArrayList<>();
-    private int idCounter = 1; 
+    private static CartaoDao instance = new CartaoDao(); // Inicialização antecipada
+    private List<Cartao> listaDeCartoes;
+    private int idCounter = 1;
 
-     public void registrarCartaoCliente(Cartao cartao) {
+    private CartaoDao() {
+        this.listaDeCartoes = new ArrayList<>();
+    }
+
+    public static CartaoDao getInstance() {
+        if (instance == null) {
+            instance = new CartaoDao();
+        }
+        return instance;
+    }
+
+    public void registrarCartaoCliente(Cartao cartao) {
         cartao.setId(idCounter++);
-        
         if (cartao.getConta() != null) {
             cartao.getConta().adicionarCartao(cartao);
         }
-        
         listaDeCartoes.add(cartao);
         System.out.println("Cartão registrado com sucesso! ID: " + cartao.getId());
     }
 
     public Cartao buscarCartaoPorId(int id) {
-        for(Cartao cartao : listaDeCartoes) {
+        for (Cartao cartao : listaDeCartoes) {
             if (cartao.getId() == id) {
                 return cartao;
             }
@@ -30,11 +39,16 @@ public class CartaoDao {
         return null;
     }
 
-     public void listarCartoes() {
-        for(Cartao c : listaDeCartoes) {
-            System.out.println(c); // Exibe todos os clientes
+    public void listarCartoes() {
+        for (Cartao c : listaDeCartoes) {
+            System.out.println(c);
         }
     }
+
+    public int getTotalCartao() {
+        return listaDeCartoes.size();
+    }
+
 
     public boolean atualizarCartao(Cartao cartaoAtualizado) {
         for (int i = 0; i < listaDeCartoes.size(); i++) {
@@ -56,6 +70,4 @@ public class CartaoDao {
             throw new IllegalStateException("Não há clientes cadastrados!");
         }
     }
-
-
 }

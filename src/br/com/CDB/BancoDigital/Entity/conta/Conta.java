@@ -15,6 +15,8 @@ public abstract class Conta {
     protected Cliente clienteAssociado;
     protected List<Cartao> cartoes;
 
+    public Conta(){}
+
     public Conta(int IdCliente, int numeroDaConta, BigDecimal saldo, Cliente clienteAssociado) {
         this.IdCliente = IdCliente;
         this.numeroDaConta = numeroDaConta;
@@ -28,6 +30,12 @@ public abstract class Conta {
         //Evitaando duplicatas
         if (!cliente.getContas().contains(this)) {
             cliente.adicionarConta(this);
+        }
+    }
+
+    public void adicionarCartao(Cartao cartao) {
+        if (cartao != null && !cartoes.contains(cartao)) {
+            cartoes.add(cartao);
         }
     }
 
@@ -78,11 +86,7 @@ public abstract class Conta {
         this.cartoes = cartoes;
     }
 
-    public void adicionarCartao(Cartao cartao) {
-        if (cartao != null && !cartoes.contains(cartao)) {
-            cartoes.add(cartao);
-        }
-    }
+    
 
     @Override
     public String toString() {

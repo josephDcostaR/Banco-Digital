@@ -4,17 +4,17 @@ import java.util.Locale;
 import java.util.Scanner;
 
 import br.com.CDB.BancoDigital.services.CartaoServices;
-import br.com.CDB.BancoDigital.services.ClienteServices;
+import br.com.CDB.BancoDigital.services.SeguroServices;
 
-public class CartaoView {
+public class SeguroView {
 
-    private CartaoServices cartaoServices;
+     private SeguroServices seguroServices;
     private MenuView menuView;
     private Scanner sc;
 
-    public CartaoView() {
+    public SeguroView() {
         this.sc = new Scanner(System.in).useLocale(Locale.US);
-        this.cartaoServices = new CartaoServices();
+        this.seguroServices = new SeguroServices();
     }
 
     public void setMenuView(MenuView menuView) {
@@ -22,26 +22,24 @@ public class CartaoView {
     }
 
 
-    public void menuCartao() {
+    public void menuSeguro() {
         System.out.println("""
                  Menu do cliente:
-                 1 - Cadastrar Cartao
-                 2 - Alterar Senha
-                 3 - Ativar Cartao
-                 4 - Buscar Cartao por Id
-                 5 - Exibir todos os Cartoes
-                 6 - Editar Cartao
-                 7 - Efetuar Pagamento
-                 8 - Remover um Cartao
-                 9 - Voltar para Menu
+                 1 - Cadastrar Seguro
+                 2 - Contratar Seguro
+                 2 - Gerar Apolice
+                 3 - Buscar Seguro
+                 4 - Exibir Seguros
+                 5 - Remover Seguro
+                 6 - Voltar para Menu
                  """);
     }
 
-    public void iniciarCartao() {
+    public void iniciarSeguro() {
 
         while(true) {
                  limparConsole();
-                 menuCartao();
+                 menuSeguro();
                  System.out.print("Escolha uma opção: ");
                  int escolha = sc.nextInt();
                  System.out.println();
@@ -49,30 +47,24 @@ public class CartaoView {
 
                  switch (escolha) {
                     case 1:
-                        cartaoServices.registrarCartao();
+                        seguroServices.registrarSeguro();
                         break;
                     case 2:
-                        cartaoServices.alterarSenhaCartao();
+                        seguroServices.contratarSeguro();
                         break;
                     case 3:
-                        cartaoServices.ativarDesativarCartao();
+                        seguroServices.gerarApolice();
                         break;
                     case 4:
-                        cartaoServices.buscarCartao();
+                        seguroServices.buscarSeguro();
                         break;
                     case 5:
-                        cartaoServices.exibirCartoes();
+                        seguroServices.listarSeguros();
                         break;
                     case 6:
-                        cartaoServices.atualizarCartao();
+                        seguroServices.removerSeguro();
                         break;
                     case 7:
-                        cartaoServices.efetuadoPagamento();;
-                        break;
-                    case 8:
-                        cartaoServices.removerCartao();
-                        break;
-                    case 9:
                         menuView.iniciarMenu();
                         break;
 

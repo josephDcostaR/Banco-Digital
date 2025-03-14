@@ -3,17 +3,17 @@ package br.com.CDB.BancoDigital.view;
 import java.util.Locale;
 import java.util.Scanner;
 
-import br.com.CDB.BancoDigital.services.ContaService;
+import br.com.CDB.BancoDigital.services.ContaServices;
 
 public class ContaView {
 
-    private ContaService contaServices;
+    private ContaServices contaServices;
     private MenuView menuView;
     private Scanner sc;
 
       public ContaView() {
         this.sc = new Scanner(System.in).useLocale(Locale.US);
-        this.contaServices = new ContaService();
+        this.contaServices = new ContaServices();
     }
 
     

@@ -3,17 +3,17 @@ package br.com.CDB.BancoDigital.view;
 import java.util.Locale;
 import java.util.Scanner;
 
-import br.com.CDB.BancoDigital.services.ClienteService;
+import br.com.CDB.BancoDigital.services.ClienteServices;
 
 public class ClienteView {
 
-    private ClienteService clienteServices;
+    private ClienteServices clienteServices;
     private MenuView menuView;
     private Scanner sc;
 
     public ClienteView() {
         this.sc = new Scanner(System.in).useLocale(Locale.US);
-        this.clienteServices = new ClienteService();
+        this.clienteServices = new ClienteServices();
     }
 
     public void setMenuView(MenuView menuView) {

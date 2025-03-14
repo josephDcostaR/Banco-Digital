@@ -24,4 +24,14 @@ public class CartaoCredito extends Cartao {
         System.out.println("O cartão de crédito foi " + status + ".");
     }
 
+    @Override
+    public void efetuarPagamento(double valor) {
+        if (valor <= limiteCredito) {
+            System.out.println("Pagamento efetuado !");
+        } else {
+            System.out.println("pagamento Recusado, vlor acima do limite");
+        }
+    }
+    
+
 }

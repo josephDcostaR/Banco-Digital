@@ -1,5 +1,6 @@
 package br.com.CDB.BancoDigital.services;
 
+import java.util.Locale;
 import java.util.Scanner;
 
 import br.com.CDB.BancoDigital.Entity.cartao.Cartao;
@@ -8,17 +9,18 @@ import br.com.CDB.BancoDigital.Entity.cartao.CartaoDebito;
 import br.com.CDB.BancoDigital.Entity.conta.Conta;
 import br.com.CDB.BancoDigital.dao.CartaoDao;
 import br.com.CDB.BancoDigital.dao.ContaDao;
+import br.com.CDB.BancoDigital.exceptions.Exceptions;
 
 public class CartaoServices {
 
-    private CartaoDao cartaoDao;
+    private CartaoDao cartaoDao = CartaoDao.getInstance();
+    private Exceptions exceptions = new Exceptions();
     private ContaDao contaDao;
     private Scanner sc;
 
     public CartaoServices() {
-        this.cartaoDao = new CartaoDao();
         this.contaDao = ContaDao.getInstance();  // Obtendo a instância única
-        this.sc = new Scanner(System.in);
+        this.sc = new Scanner(System.in).useLocale(Locale.US);
     }
 
     // Método para solicitar entrada do usuário
@@ -51,6 +53,7 @@ public class CartaoServices {
         int numeroDoCartao = Integer.parseInt(solicitarEntrada("Digite o numero do cartão: "));
         sc.nextLine();
         String senha = solicitarEntrada("Cadatre a senha do cartão: ");
+        exceptions.isStringEmptyField(senha);
 
         System.out.println("""
             Cartão:
@@ -86,7 +89,6 @@ public class CartaoServices {
                 System.out.println("Tipo de cartão inválido.");
                 return;
             }
-
 
         conta.adicionarCartao(cartao);
         cartaoDao.registrarCartaoCliente(cartao);
@@ -133,6 +135,7 @@ public class CartaoServices {
     
             case 2:
                 String novaSenha = solicitarEntrada("Digite a nova senha do cartão: ");
+                exceptions.isStringEmptyField(novaSenha);
                 cartao.setSenha(novaSenha);
                 break;
     
@@ -179,11 +182,19 @@ public class CartaoServices {
     
 
     // Remover um cartão pelo ID
-    public void removerCartao() {
-        System.out.println("Qual o ID do cliente buscado: ");
-        int escolhaId = sc.nextInt();
+    public void removerCartao() { 
+        int escolhaID = Integer.parseInt(solicitarEntrada("Qual o ID do cartao buscado: "));
         sc.nextLine();
-        cartaoDao.removerCartao(escolhaId);
+        cartaoDao.removerCartao(escolhaID);
+    }
+
+    @SuppressWarnings("null")
+    public void efetuadoPagamento() {
+        
+        double escolhaID = Double.parseDouble("Qual o valor do pagamento: ");
+        sc.nextLine();
+        Cartao cartao = null;
+        cartao.efetuarPagamento(escolhaID);
     }
 
 
@@ -201,6 +212,7 @@ public class CartaoServices {
             }
     
             String novaSenha = solicitarEntrada("Digite a nova senha: ");
+            exceptions.isStringEmptyField(novaSenha);
             cartao.alterarSenha(novaSenha); // Passando a senha como parâmetro
             cartaoDao.atualizarCartao(cartao);
             System.out.println("Senha alterada com sucesso!");

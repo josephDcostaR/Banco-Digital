@@ -10,12 +10,14 @@ public class MenuView {
     ClienteView clienteView = new ClienteView();
     ContaView contaView = new ContaView();
     CartaoView cartaoView = new CartaoView();
+    SeguroView seguroView = new SeguroView();
 
-     public MenuView(ClienteView clienteView, ContaView contaView, CartaoView cartaoView) {
+     public MenuView(ClienteView clienteView, ContaView contaView, CartaoView cartaoView, SeguroView seguroView) {
         this.sc = new Scanner(System.in).useLocale(Locale.US);
         this.clienteView = clienteView;
         this.contaView = contaView;
         this.cartaoView = cartaoView;
+        this.seguroView = seguroView;
     }
 
     public void iniciarMenu() {
@@ -25,9 +27,11 @@ public class MenuView {
 
                  System.out.println("""
                          Banco Digital CVV:
-                         1 - Cliente
-                         2 - Conta
-                         3 -Cartão
+                         1 - Acessar Menu Cliente
+                         2 - Acessar Menu Conta
+                         3 - Acessar Menu Cartão
+                         4 - Acessar Menu Cartão
+                         5 - Sair
                          """);
                  
                  System.out.print("Escolha uma opção: ");
@@ -45,6 +49,12 @@ public class MenuView {
                     case 3:
                         cartaoView.iniciarCartao();
                         break;
+                    case 4:
+                        seguroView.iniciarSeguro();
+                        break;
+                    case 5:
+                        sairSistema();
+                        break;
                   
                     default:
                         System.out.println("Opção inválida!");
@@ -53,6 +63,11 @@ public class MenuView {
                 sc.nextLine();
         }
 
+    }
+
+    private void sairSistema(){
+        System.out.println("Encerrando ssitema...");
+        System.exit(0);
     }
 
     private void limparConsole() {

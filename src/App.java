@@ -3,6 +3,7 @@ import br.com.CDB.BancoDigital.view.CartaoView;
 import br.com.CDB.BancoDigital.view.ClienteView;
 import br.com.CDB.BancoDigital.view.ContaView;
 import br.com.CDB.BancoDigital.view.MenuView;
+import br.com.CDB.BancoDigital.view.SeguroView;
 
 public class App {
 
@@ -12,11 +13,13 @@ public class App {
         ClienteView clienteView = new ClienteView();
         ContaView contaView = new ContaView();
         CartaoView cartaoView = new CartaoView();
-        MenuView menu = new MenuView(clienteView,contaView, cartaoView);
+        SeguroView seguroView = new SeguroView();
+        MenuView menu = new MenuView(clienteView,contaView, cartaoView, seguroView);
 
         clienteView.setMenuView(menu);
         contaView.setMenuView(menu);
         cartaoView.setMenuView(menu);
+        seguroView.setMenuView(menu);
 
         menu.iniciarMenu();
 
@@ -25,6 +28,7 @@ public class App {
        // 1. Contruir a seguro serices, dao e view
        // 3. Fazer testes com as entidades
        // 4. Melhorar a logica da relação entre as classes 
+       //5. Cnstruir o Segura relação cartao - seguro
 
 
         //Testes:

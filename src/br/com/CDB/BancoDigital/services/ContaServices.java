@@ -1,6 +1,7 @@
 package br.com.CDB.BancoDigital.services;
 
 import java.math.BigDecimal;
+import java.util.Locale;
 import java.util.Scanner;
 
 import br.com.CDB.BancoDigital.Entity.cliente.Cliente;
@@ -10,13 +11,13 @@ import br.com.CDB.BancoDigital.Entity.conta.ContaPoupanca;
 import br.com.CDB.BancoDigital.dao.ClienteDao;
 import br.com.CDB.BancoDigital.dao.ContaDao;
 
-public class ContaService {
+public class ContaServices {
     ContaDao contaDao = ContaDao.getInstance();
     ClienteDao clienteDao = ClienteDao.getInstance();
     private Scanner sc;
 
-    public ContaService() {
-        this.sc = new Scanner(System.in);
+    public ContaServices() {
+        this.sc = new Scanner(System.in).useLocale(Locale.US);
     }
 
     private String solicitarEntrada(String mensagem) {

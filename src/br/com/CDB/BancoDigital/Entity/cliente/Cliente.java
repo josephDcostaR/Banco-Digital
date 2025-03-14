@@ -12,7 +12,7 @@ public class Cliente {
     private String nome;
     private LocalDate dataDeNascimento;
     private String endereco;
-    private Categoria categoria;
+    private CategoriaCliente categoriaCliente;
     private List<Conta> contas;
 
     public enum Categoria {
@@ -24,25 +24,25 @@ public class Cliente {
     }
 
     // Construtor que recebe também uma conta (usa o construtor padrão para inicializar 'contas')
-    public Cliente(String CPF, String nome, LocalDate dataDeNascimento, String endereco, Categoria categoria, Conta conta) {
+    public Cliente(String CPF, String nome, LocalDate dataDeNascimento, String endereco, CategoriaCliente categoriaCliente, Conta conta) {
         this();
         this.CPF = CPF;
         this.nome = nome;
         this.dataDeNascimento = dataDeNascimento;
         this.endereco = endereco;
-        this.categoria = categoria;
+        this.categoriaCliente = categoriaCliente;
         if(conta != null) {
             this.adicionarConta(conta);
         }
     }
 
-    public Cliente(String CPF, String nome, LocalDate dataDeNascimento, String endereco, Categoria categoria) {
+    public Cliente(String CPF, String nome, LocalDate dataDeNascimento, String endereco, CategoriaCliente categoria) {
         this(); // chama o construtor padrão para inicializar a lista
         this.CPF = CPF;
         this.nome = nome;
         this.dataDeNascimento = dataDeNascimento;
         this.endereco = endereco;
-        this.categoria = categoria;
+        this.categoriaCliente = categoriaCliente;
     }
 
     public void adicionarConta(Conta conta) {
@@ -93,12 +93,12 @@ public class Cliente {
         this.endereco = endereco;
     }
 
-    public Categoria getCategoria() {
-        return categoria;
+    public CategoriaCliente getCategoria() {
+        return categoriaCliente;
     }
 
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
+    public void setCategoria(CategoriaCliente categoriaCliente) {
+        this.categoriaCliente = categoriaCliente;
     }
 
     
@@ -117,6 +117,6 @@ public class Cliente {
             contasInfo.setLength(contasInfo.length() - 2);            
         }
         return "Cliente [Id=" + Id + ", CPF=" + CPF + ", nome=" + nome + ", dataDeNascimento=" + dataDeNascimento
-        + ", endereco=" + endereco + ", categoria=" + categoria + ", contas={" + contasInfo.toString() + "}]";
+        + ", endereco=" + endereco + ", categoria=" + categoriaCliente + ", contas={" + contasInfo.toString() + "}]";
     }
 }

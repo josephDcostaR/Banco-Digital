@@ -38,7 +38,7 @@ public class ClienteDao {
 
     public void listarClientes() {
         for(Cliente c : clientes) {
-            System.out.println(c); // Exibe todos os clientes
+            System.out.println(c); 
         }
     }
 
@@ -48,7 +48,7 @@ public class ClienteDao {
     
     public void deletarCliente(int id) {
         verificarListaClientes();
-        clientes.removeIf(c -> c.getId() == id); // Remove sem erro de concorrência
+        clientes.removeIf(c -> c.getId() == id); 
     }
     
 
