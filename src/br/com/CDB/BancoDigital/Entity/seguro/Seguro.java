@@ -18,8 +18,8 @@ public abstract class Seguro {
         this.dataContratacao = dataContratacao;
         this.valorApolice = valorApolice;
         if(cartaoAssociado != null) {
-            cartaoAssociado.adicionarSeguro(this);;
-         }
+            cartaoAssociado.adicionarSeguro(this);
+        }
     }
 
     public abstract void contratarSeguro();
