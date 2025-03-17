@@ -3,10 +3,6 @@ package br.com.CDB.BancoDigital.services;
 import java.util.Locale;
 import java.util.Scanner;
 
-import br.com.CDB.BancoDigital.Entity.cartao.Cartao;
-import br.com.CDB.BancoDigital.Entity.cartao.CartaoCredito;
-import br.com.CDB.BancoDigital.Entity.cartao.CartaoDebito;
-import br.com.CDB.BancoDigital.Entity.conta.Conta;
 import br.com.CDB.BancoDigital.dao.CartaoDao;
 import br.com.CDB.BancoDigital.dao.ContaDao;
 import br.com.CDB.BancoDigital.exceptions.Exceptions;
@@ -36,7 +32,6 @@ public class CartaoServices {
         }
 
         int idConta= Integer.parseInt(solicitarEntrada("Digite o ID da conta associada: "));
-        sc.nextLine();
         Conta conta = contaDao.buscarContaPorId(idConta);
         
         if (conta == null) {
@@ -51,7 +46,6 @@ public class CartaoServices {
     
 
         int numeroDoCartao = Integer.parseInt(solicitarEntrada("Digite o numero do cartão: "));
-        sc.nextLine();
         String senha = solicitarEntrada("Cadatre a senha do cartão: ");
         exceptions.isStringEmptyField(senha);
 
@@ -61,7 +55,6 @@ public class CartaoServices {
             2 - Desativado 
             """);
         int status = Integer.parseInt(solicitarEntrada("Qual o Status do cartão"));
-        sc.nextLine();
         boolean cartaoStatus = (status == 1);
 
         System.out.println("""
@@ -70,7 +63,6 @@ public class CartaoServices {
             2 - Cartão de Débito 
             """);
         int tipoCartao = Integer.parseInt(solicitarEntrada("Insira: "));
-        sc.nextLine();
 
         Cartao cartao;
             
@@ -83,7 +75,6 @@ public class CartaoServices {
             cartao = new CartaoCredito(numeroDoCartao, senha, cartaoStatus, limiteCredito);
             } else if (tipoCartao == 2) {
                 double limiteDiario = Double.parseDouble(solicitarEntrada("Qual o limite do cartão hoje:  "));
-                sc.nextLine();
                 cartao = new CartaoDebito(numeroDoCartao, senha, cartaoStatus, limiteDiario);
             } else {
                 System.out.println("Tipo de cartão inválido.");
@@ -188,7 +179,6 @@ public class CartaoServices {
         cartaoDao.removerCartao(escolhaID);
     }
 
-    @SuppressWarnings("null")
     public void efetuadoPagamento() {
         
         double escolhaID = Double.parseDouble("Qual o valor do pagamento: ");
@@ -240,6 +230,4 @@ public class CartaoServices {
             System.out.println("Erro: ID inválido. Digite um número válido.");
         }
     }
-    
-
 }

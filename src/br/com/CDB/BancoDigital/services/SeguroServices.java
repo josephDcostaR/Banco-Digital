@@ -153,12 +153,6 @@ public class SeguroServices {
             System.out.println("ID inválido.");
             return;
         }
-        boolean removido = seguroDao.removerSeguroPorId(id);
-        if (removido) {
-            System.out.println("Seguro removido com sucesso.");
-        } else {
-            System.out.println("Seguro não encontrado para remoção.");
-        }
     }
 
     public void contratarSeguro() {
