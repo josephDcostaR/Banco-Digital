@@ -1,8 +1,9 @@
-package br.com.CDB.BancoDigital.Entity.conta;
+package br.com.CDB.BancoDigital.entity.conta;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 
-import br.com.CDB.BancoDigital.Entity.cliente.Cliente;
+import br.com.CDB.BancoDigital.entity.cliente.Cliente;
 
 public class ContaCorrente extends Conta {
 
@@ -16,8 +17,10 @@ public class ContaCorrente extends Conta {
 
     @Override
     public void exibirSaldo() {
-        System.out.println("Saldo da Conta Corrente " + getNumeroDaConta() + ": R$  " + getSaldo());
-    }
+    DecimalFormat df = new DecimalFormat("#,##0.00");
+    System.out.println("Número da conta corrente: " + getNumeroDaConta() + 
+                       ", Saldo da conta: R$ " + df.format(getSaldo()));
+}
 
     
     @Override

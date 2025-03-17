@@ -23,12 +23,13 @@ public class ClienteView {
 
     public void menuCliente() {
         System.out.println("""
-                 Menu do cliente:
+                 Menu do Cliente:
                  1 - Cadastrar Cliente
                  2 - Buscar Cliente por Id
                  3 - Exibir todos os clientes
-                 4 - Remover um Cliente
-                 5 - Voltar para Menu
+                 4 - Atualizar Cartao
+                 5 - Remover um Cliente
+                 6 - Voltar para Menu
                  """);
     }
 
@@ -53,9 +54,11 @@ public class ClienteView {
                         clienteServices.exibirClientes();
                         break;
                     case 4:
-                        clienteServices.removerCliente();
-                        break;
+                        clienteServices.atualizarCliente();
                     case 5:
+                        clienteServices.deletarCliente();
+                        break;
+                    case 6:
                         menuView.iniciarMenu();
                         break;
                     default:

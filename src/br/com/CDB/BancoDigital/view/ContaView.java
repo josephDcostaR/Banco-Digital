@@ -22,15 +22,17 @@ public class ContaView {
         this.menuView = menuView;
     }
 
-
-
     public void menuConta() {
         System.out.println("""
-                === Menu da conta ===
+                === Menu da Conta ===
                 1 - Cadastrar Conta
-                2 - Exibir Saldos
-                3 - Simular Mes
-                4 - volvar ao menu.
+                2 - Buscar Conta
+                3 - Exibir Contas
+                4 - Atualizar Conta
+                5 - Deletar Cliente
+                6 - Exibir Saldos
+                7 - Simular Mes
+                8 - volvar ao menu
                 """);
     }
 
@@ -49,12 +51,24 @@ public class ContaView {
                         contaServices.cadastrarConta();
                         break;
                     case 2:
-                        contaServices.exibirSaldos();
+                        contaServices.buscarConta();
                         break;
                     case 3:
-                        contaServices.simularMes();
+                        contaServices.exibirContas();
                         break;
                     case 4:
+                        contaServices.atualizarConta();
+                        break;
+                    case 5:
+                        contaServices.deletarConta();
+                        break;
+                    case 6:
+                        contaServices.exibirSaldos();
+                        break;
+                    case 7:
+                        contaServices.simularMes();
+                        break;
+                    case 8:
                         menuView.iniciarMenu();
                         break;
                     default:

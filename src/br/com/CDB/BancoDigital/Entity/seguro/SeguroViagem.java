@@ -1,9 +1,8 @@
-package br.com.CDB.BancoDigital.Entity.seguro;
+package br.com.CDB.BancoDigital.entity.seguro;
 
 import java.time.LocalDate;
 
-
-import br.com.CDB.BancoDigital.Entity.cartao.Cartao;
+import br.com.CDB.BancoDigital.entity.cartao.Cartao;
 
 public class SeguroViagem extends Seguro {
 

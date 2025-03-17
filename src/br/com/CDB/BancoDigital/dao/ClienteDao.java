@@ -2,7 +2,8 @@ package br.com.CDB.BancoDigital.dao;
 
 import java.util.ArrayList;
 import java.util.List;
-import br.com.CDB.BancoDigital.Entity.cliente.Cliente;
+
+import br.com.CDB.BancoDigital.entity.cliente.Cliente;
 
 public class ClienteDao {
 
@@ -22,12 +23,13 @@ public class ClienteDao {
         return instance;
     }
 
-    public void adicionarClientes(Cliente cliente) {
+    public void registrarClientes(Cliente cliente) {
         cliente.setId(idCounter++);
         clientes.add(cliente);
     }
 
-    public Cliente encontraCliente(int id) {
+    public Cliente encontraClientePorId(int id) {
+        verificarListaClientes();
         for(Cliente c : clientes) {
             if (c.getId() == id) {
                 return c;
@@ -36,19 +38,40 @@ public class ClienteDao {
         return null;
     }
 
-    public void listarClientes() {
+    public Cliente listarClientes() {
+        verificarListaClientes();
         for(Cliente c : clientes) {
-            System.out.println(c); 
+            if (c.isAtivo()) {
+                return c;
+            }
         }
+
+        return null;
+    }
+
+    
+    public boolean atualizarCartao(Cliente cartaoAtualizado) {
+        for (int i = 0; i < clientes.size(); i++) {
+            if (clientes.get(i).getId() == cartaoAtualizado.getId()) {
+                clientes.set(i, cartaoAtualizado);
+                return true;
+            }
+        }
+        return false;
     }
 
     public int getTotalClientes() {
         return clientes.size();
     }
     
-    public void deletarCliente(int id) {
+    public void removerCliente(int id) {
         verificarListaClientes();
-        clientes.removeIf(c -> c.getId() == id); 
+        Cliente cliente = encontraClientePorId(id);
+        if (cliente != null) {
+            cliente.inativar();
+            System.out.println("Cliente desligado com sucesso!");        
+        }
+        
     }
     
 

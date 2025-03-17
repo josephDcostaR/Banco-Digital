@@ -2,7 +2,8 @@ package br.com.CDB.BancoDigital.dao;
 
 import java.util.ArrayList;
 import java.util.List;
-import br.com.CDB.BancoDigital.Entity.cartao.Cartao;
+
+import br.com.CDB.BancoDigital.entity.cartao.Cartao;
 
 public class CartaoDao {
 
@@ -32,23 +33,25 @@ public class CartaoDao {
 
     public Cartao buscarCartaoPorId(int id) {
         for (Cartao cartao : listaDeCartoes) {
-            if (cartao.getId() == id) {
+            if (cartao.getId() == id && cartao.isAtivo()) {
                 return cartao;
             }
         }
         return null;
     }
 
-    public void listarCartoes() {
+    public Cartao listarCartoes() {
         for (Cartao c : listaDeCartoes) {
-            System.out.println(c);
+            if (c.isAtivo()) {
+                return c;
+            }
         }
+        return null;
     }
 
     public int getTotalCartao() {
         return listaDeCartoes.size();
     }
-
 
     public boolean atualizarCartao(Cartao cartaoAtualizado) {
         for (int i = 0; i < listaDeCartoes.size(); i++) {
@@ -60,9 +63,14 @@ public class CartaoDao {
         return false;
     }
 
-    public boolean removerCartao(int id) {
+    public void removerCartao(int id) {
         verificarListaClientes();
-        return listaDeCartoes.removeIf(cartao -> cartao.getId() == id);
+        Cartao cartao = buscarCartaoPorId(id);
+        if (cartao != null) {
+            cartao.inativar();
+            System.out.println("Cartão desligado com sucesso!");
+        }
+       
     }
 
     private void verificarListaClientes() {

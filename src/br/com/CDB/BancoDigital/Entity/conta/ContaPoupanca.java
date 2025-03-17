@@ -1,9 +1,10 @@
-package br.com.CDB.BancoDigital.Entity.conta;
+package br.com.CDB.BancoDigital.entity.conta;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.text.DecimalFormat;
 
-import br.com.CDB.BancoDigital.Entity.cliente.Cliente;
+import br.com.CDB.BancoDigital.entity.cliente.Cliente;
 
 public class ContaPoupanca extends Conta {
 
@@ -16,8 +17,10 @@ public class ContaPoupanca extends Conta {
 
     @Override
     public void exibirSaldo() {
-        System.out.println("Saldo da Conta Poupança " + getNumeroDaConta() + ": R$" + getSaldo());
-    }
+    DecimalFormat df = new DecimalFormat("#,##0.00");
+    System.out.println("Número da conta poupanca: " + getNumeroDaConta() + 
+                       ", Saldo da conta: R$ " + df.format(getSaldo()));
+}
 
     @Override
     public void transferirDinheiro(Conta destino, BigDecimal valor) {

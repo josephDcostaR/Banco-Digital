@@ -4,7 +4,6 @@ import java.util.Locale;
 import java.util.Scanner;
 
 import br.com.CDB.BancoDigital.services.CartaoServices;
-import br.com.CDB.BancoDigital.services.ClienteServices;
 
 public class CartaoView {
 
@@ -21,10 +20,9 @@ public class CartaoView {
         this.menuView = menuView;
     }
 
-
     public void menuCartao() {
         System.out.println("""
-                 Menu do cliente:
+                 Menu do Cartao:
                  1 - Cadastrar Cartao
                  2 - Alterar Senha
                  3 - Ativar Cartao
@@ -74,16 +72,13 @@ public class CartaoView {
                         break;
                     case 9:
                         menuView.iniciarMenu();
-                        break;
-
-                    
+                        break;   
                     default:
                         System.out.println("Opção inválida!");
                 }
                 System.out.println("\nPressione Enter para continuar...");
                 sc.nextLine();
         }
-         
     }
 
     private void limparConsole() {
@@ -103,3 +98,4 @@ public class CartaoView {
     }
 
 }
+

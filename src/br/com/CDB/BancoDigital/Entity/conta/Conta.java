@@ -1,21 +1,23 @@
-package br.com.CDB.BancoDigital.Entity.conta;
+package br.com.CDB.BancoDigital.entity.conta;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.CDB.BancoDigital.Entity.cartao.Cartao;
-import br.com.CDB.BancoDigital.Entity.cliente.Cliente;
+import br.com.CDB.BancoDigital.entity.cartao.Cartao;
+import br.com.CDB.BancoDigital.entity.cliente.Cliente;
 
 public abstract class Conta {
-
     protected int IdCliente;
     protected int numeroDaConta;
     protected BigDecimal saldo;
     protected Cliente clienteAssociado;
     protected List<Cartao> cartoes;
+    protected boolean ativa;
 
-    public Conta(){}
+    public Conta(){
+        this.ativa = true;
+    }
 
     public Conta(int IdCliente, int numeroDaConta, BigDecimal saldo, Cliente clienteAssociado) {
         this.IdCliente = IdCliente;
@@ -25,6 +27,7 @@ public abstract class Conta {
         this.cartoes = new ArrayList<>();
     }
 
+    //Cria a relaçao Conta 1.1 Cliente
     public void associarAoCliente(Cliente cliente) {
         this.clienteAssociado = cliente;
         //Evitaando duplicatas
@@ -33,9 +36,18 @@ public abstract class Conta {
         }
     }
 
+    //Cria a relaçao Conta 1.* Cartao
     public void adicionarCartao(Cartao cartao) {
         if (cartao != null && !cartoes.contains(cartao)) {
             cartoes.add(cartao);
+        }
+    }
+
+    //Desliga a conta e os cartões relacionados a ela
+    public void inativar() {
+        this.ativa = false;
+        for(Cartao cartao : cartoes){
+            cartao.inativar();
         }
     }
 
@@ -70,6 +82,7 @@ public abstract class Conta {
     public void setClienteAssociado(Cliente clienteAssociado) {
         this.clienteAssociado = clienteAssociado;
     }
+    
     public int getIdCliente() {
         return IdCliente;
     }

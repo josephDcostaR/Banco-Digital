@@ -3,7 +3,6 @@ package br.com.CDB.BancoDigital.view;
 import java.util.Locale;
 import java.util.Scanner;
 
-import br.com.CDB.BancoDigital.services.CartaoServices;
 import br.com.CDB.BancoDigital.services.SeguroServices;
 
 public class SeguroView {
@@ -21,17 +20,17 @@ public class SeguroView {
         this.menuView = menuView;
     }
 
-
     public void menuSeguro() {
         System.out.println("""
-                 Menu do cliente:
+                 Menu do Seguro:
                  1 - Cadastrar Seguro
                  2 - Contratar Seguro
-                 2 - Gerar Apolice
-                 3 - Buscar Seguro
-                 4 - Exibir Seguros
-                 5 - Remover Seguro
-                 6 - Voltar para Menu
+                 3 - Gerar Apolice
+                 4 - Buscar Seguro
+                 5 - Exibir Seguros
+                 6 - Atualizar Seguro
+                 7 - Remover Seguro
+                 8 - Voltar para Menu
                  """);
     }
 
@@ -62,20 +61,20 @@ public class SeguroView {
                         seguroServices.listarSeguros();
                         break;
                     case 6:
-                        seguroServices.removerSeguro();
+                        seguroServices.atualizarSeguro();
                         break;
                     case 7:
-                        menuView.iniciarMenu();
+                        seguroServices.removerSeguro();
                         break;
-
-                    
+                    case 8:
+                        menuView.iniciarMenu();
+                        break;            
                     default:
                         System.out.println("Opção inválida!");
                 }
                 System.out.println("\nPressione Enter para continuar...");
                 sc.nextLine();
-        }
-         
+        }     
     }
 
     private void limparConsole() {

@@ -1,10 +1,10 @@
-package br.com.CDB.BancoDigital.Entity.cliente;
+package br.com.CDB.BancoDigital.entity.cliente;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.CDB.BancoDigital.Entity.conta.Conta;
+import br.com.CDB.BancoDigital.entity.conta.Conta;
 
 public class Cliente {
     private int Id;
@@ -14,10 +14,7 @@ public class Cliente {
     private String endereco;
     private CategoriaCliente categoriaCliente;
     private List<Conta> contas;
-
-    public enum Categoria {
-        COMUM,SUPER,PREMIUM
-    }
+    private boolean ativo;
 
     public Cliente(){
         this.contas = new ArrayList<>();
@@ -36,21 +33,38 @@ public class Cliente {
         }
     }
 
-    public Cliente(String CPF, String nome, LocalDate dataDeNascimento, String endereco, CategoriaCliente categoria) {
-        this(); // chama o construtor padrão para inicializar a lista
-        this.CPF = CPF;
-        this.nome = nome;
-        this.dataDeNascimento = dataDeNascimento;
-        this.endereco = endereco;
-        this.categoriaCliente = categoriaCliente;
+    public Cliente(String CPF, String nome, LocalDate dataDeNascimento, String endereco, CategoriaCliente categoriaCliente) {
+            this(); // chama o construtor padrão para inicializar a lista
+            this.CPF = CPF;
+            this.nome = nome;
+            this.dataDeNascimento = dataDeNascimento;
+            this.endereco = endereco;
+            this.categoriaCliente = categoriaCliente;
     }
 
+    //Cria a relação Cliente 1.* Contas
     public void adicionarConta(Conta conta) {
         if (this.contas == null) {
             this.contas = new ArrayList<>();
         }
         this.contas.add(conta);
         conta.setClienteAssociado(this);
+    }
+
+    //Desliga o cliente e as contas relacionadas a ele
+    public void inativar() {
+        this.ativo = false;
+        for(Conta conta : contas) {
+            conta.inativar();
+        }
+    }
+
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
     }
 
     public int getId() {
@@ -100,7 +114,6 @@ public class Cliente {
     public void setCategoria(CategoriaCliente categoriaCliente) {
         this.categoriaCliente = categoriaCliente;
     }
-
     
     public List<Conta> getContas() {
         return contas;
@@ -117,6 +130,6 @@ public class Cliente {
             contasInfo.setLength(contasInfo.length() - 2);            
         }
         return "Cliente [Id=" + Id + ", CPF=" + CPF + ", nome=" + nome + ", dataDeNascimento=" + dataDeNascimento
-        + ", endereco=" + endereco + ", categoria=" + categoriaCliente + ", contas={" + contasInfo.toString() + "}]";
+        + ", endereco=" + endereco + ", categoria=" + categoriaCliente + ", Numero das Contas{" + contasInfo.toString() + "}]";
     }
 }

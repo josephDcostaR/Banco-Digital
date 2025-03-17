@@ -1,6 +1,4 @@
-package br.com.CDB.BancoDigital.Entity.cartao;
-
-
+package br.com.CDB.BancoDigital.entity.cartao;
 
 public class CartaoDebito extends Cartao {
 
@@ -19,8 +17,8 @@ public class CartaoDebito extends Cartao {
     
         @Override
         public void ativarDesativar() {
-            this.status = !this.status;
-            String status = this.status ? "Ativado" : "Desativado";
+            this.ativo = !this.ativo;
+            String status = this.ativo ? "Ativado" : "Desativado";
             System.out.println("O cartão de crédito foi " + status + ".");
         }
     

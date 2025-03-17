@@ -66,7 +66,7 @@ public class MenuView {
     }
 
     private void sairSistema(){
-        System.out.println("Encerrando ssitema...");
+        System.out.println("Encerrando Sitema...");
         System.exit(0);
     }
 
@@ -85,5 +85,4 @@ public class MenuView {
             System.out.println("Erro ao limpar o console!");
         }
     }
-
 }

@@ -2,7 +2,8 @@ package br.com.CDB.BancoDigital.dao;
 
 import java.util.ArrayList;
 import java.util.List;
-import br.com.CDB.BancoDigital.Entity.conta.Conta;
+
+import br.com.CDB.BancoDigital.entity.conta.Conta;
 
 public class ContaDao {
 
@@ -54,14 +55,47 @@ public class ContaDao {
         }
         return null;
     }
+
+    public Conta listarTodasAsContas() {
+        verificarContas();
+        for(Conta c : listaDeContas){
+            return c;
+        }
+        return null;
+    }
+
+    public boolean atualizarConta(Conta contaAtualizada) {
+        for (int i = 0; i < listaDeContas.size(); i++) {
+            if (listaDeContas.get(i).getIdCliente() == contaAtualizada.getIdCliente()) {
+                listaDeContas.set(i, contaAtualizada);
+                return true;
+            }
+        }
+        return false;
+    }
     
-    public void listarContas() {
+    public void removerConta(int id) {
+        verificarContas();
+        Conta conta = buscarContaPorId(id);
+        if (conta != null) {
+            conta.inativar();
+            System.out.println("conta desligada com sucesso!");
+        }
+    }
+
+    public void revelarSaldoDaConta() {
         if (listaDeContas.isEmpty()) {
             System.out.println("Nenhuma conta cadastrada.");
         } else {
             for (Conta conta : listaDeContas) {
                 conta.exibirSaldo();
             }
+        }
+    }
+
+    private void verificarContas() {
+        if (listaDeContas.isEmpty()) {
+            throw new IllegalStateException("Não há contas cadastrados!");
         }
     }
 }

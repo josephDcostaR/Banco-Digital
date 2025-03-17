@@ -5,9 +5,10 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Locale;
-import br.com.CDB.BancoDigital.Entity.cliente.CategoriaCliente;
-import br.com.CDB.BancoDigital.Entity.cliente.Cliente;
+
 import br.com.CDB.BancoDigital.dao.ClienteDao;
+import br.com.CDB.BancoDigital.entity.cliente.CategoriaCliente;
+import br.com.CDB.BancoDigital.entity.cliente.Cliente;
 import br.com.CDB.BancoDigital.exceptions.Exceptions;
 import br.com.CDB.BancoDigital.validations.Validations;
 
@@ -33,7 +34,7 @@ public class ClienteServices {
         try {
             System.out.println("=== Cadastro de cliente ===");
 
-            String cpf = solicitarEntrada("Insira o CPF: ");
+            String cpf = solicitarEntrada("Insira o CPF (somente numeros 11 digitos): ");
             exceptions.isStringEmptyField(cpf);
 
             if (validations.validarCPF(cpf)) {
@@ -59,9 +60,8 @@ public class ClienteServices {
                 return;
             }
            
-
             Cliente cliente = new Cliente(cpf, nome, dataNascimento, endereco, categoria);
-            clienteDao.adicionarClientes(cliente);
+            clienteDao.registrarClientes(cliente);
             System.out.println("Cliente cadastrado com sucesso!");
             
         } catch (IllegalArgumentException e) {
@@ -79,7 +79,7 @@ public class ClienteServices {
             """);
 
         try {
-            int escolha = Integer.parseInt(sc.nextLine().trim());
+            int escolha = Integer.parseInt(solicitarEntrada("Digite: "));
         
             return switch (escolha) {
                 case 1 ->  CategoriaCliente.COMUM;
@@ -114,21 +114,88 @@ public class ClienteServices {
     }
 
     public void buscarCliente() {
-        System.out.println("Qual o ID do cliente buscado: ");
-        int escolhaId = sc.nextInt();
-        sc.nextLine();
-        clienteDao.encontraCliente(escolhaId);
+        int escolhaId = Integer.parseInt("Qual o ID do cliente buscado: ");
+        System.out.println(clienteDao.encontraClientePorId(escolhaId));
+    }
+
+    // Atualizar um cartão
+    public void atualizarCliente() {
+        int idCartao = Integer.parseInt(solicitarEntrada("Digite o ID do cliente que deseja atualizar: "));
+        Cliente cliente = clienteDao.encontraClientePorId(idCartao);
+    
+        if (cliente == null) {
+            System.out.println("Erro: Cartão não encontrado.");
+            return;
+        }
+    
+        System.out.println("""
+            O que deseja atualizar?
+            1 - CPF
+            2 - Nome
+            3 - Data de Nascimento
+            4 - Endereco
+            5 - Categoria
+            6 - Cancelar
+            """);
+       
+    
+        int escolha = Integer.parseInt(solicitarEntrada("Escolha uma opção: "));
+        
+        switch (escolha) {
+            case 1:
+                String cpf = solicitarEntrada("Insira o CPF (somente numeros 11 digitos): ");
+                exceptions.isStringEmptyField(cpf);
+
+                if (validations.validarCPF(cpf)) {
+                    System.out.println("CPF válido!");
+                }else {
+                    System.out.println("CPF inválido !");
+                    return;
+                }
+        
+                cliente.setCPF(cpf);
+                break;
+    
+            case 2:
+                String nome = solicitarEntrada("Insira o nome: ");
+                exceptions.isStringEmptyField(nome);
+                cliente.setNome(nome);
+                break;
+    
+            case 3:
+
+                String endereco = solicitarEntrada("Insira o endereço: ");
+                exceptions.isStringEmptyField(endereco);
+                cliente.setEndereco(endereco);
+                break;
+    
+            case 4:
+                
+                CategoriaCliente categoria = solicitarcCategoria();
+                cliente.setCategoria(categoria);
+                return;
+    
+            case 5:
+                System.out.println("Operação cancelada.");
+                return;
+    
+            default:
+                System.out.println("Opção inválida.");
+                return;
+        }
+    
+        clienteDao.atualizarCartao(cliente);
+        System.out.println("Cartão atualizado com sucesso!");
     }
 
     public void exibirClientes() {
-        clienteDao.listarClientes();
+        System.out.println(clienteDao.listarClientes());
     }
 
-    public void removerCliente() {
-        System.out.println("Qual o ID do cliente buscado: ");
-        int escolhaId = sc.nextInt();
-        sc.nextLine();
-        clienteDao.deletarCliente(escolhaId);
+    public void deletarCliente() {
+        int escolhaId = Integer.parseInt(solicitarEntrada("Qual o ID do cliente buscado: "));
+        clienteDao.removerCliente(escolhaId);
+        System.out.println("Cliente desliga com sucesso!");
     }
 
     // Método para fechar o scanner (deve ser chamado antes de encerrar o programa)

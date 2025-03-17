@@ -5,6 +5,10 @@ import java.util.Scanner;
 
 import br.com.CDB.BancoDigital.dao.CartaoDao;
 import br.com.CDB.BancoDigital.dao.ContaDao;
+import br.com.CDB.BancoDigital.entity.cartao.Cartao;
+import br.com.CDB.BancoDigital.entity.cartao.CartaoCredito;
+import br.com.CDB.BancoDigital.entity.cartao.CartaoDebito;
+import br.com.CDB.BancoDigital.entity.conta.Conta;
 import br.com.CDB.BancoDigital.exceptions.Exceptions;
 
 public class CartaoServices {
@@ -89,14 +93,13 @@ public class CartaoServices {
     // Buscar um cartão pelo ID
     public void buscarCartao() {
         int idCartao = Integer.parseInt(solicitarEntrada("Digite o ID do cartao: "));
-        sc.nextLine();
         System.out.println(cartaoDao.buscarCartaoPorId(idCartao));
 
     }
 
     // Listar todos os cartões
     public void exibirCartoes() {
-        cartaoDao.listarCartoes();
+        System.out.println(cartaoDao.listarCartoes());
     }
 
     // Atualizar um cartão
@@ -133,7 +136,7 @@ public class CartaoServices {
             case 3:
                 System.out.println("1 - Ativar\n2 - Desativar");
                 int status = Integer.parseInt(solicitarEntrada("Escolha: "));
-                cartao.setStatus(status == 1);
+                cartao.setAtivo(status == 1);
                 break;
     
             case 4:
@@ -147,10 +150,10 @@ public class CartaoServices {
                 Cartao novoCartao;
                 if (novoTipo == 1) {
                     double novoLimite = Double.parseDouble(solicitarEntrada("Digite o novo limite de crédito: "));
-                    novoCartao = new CartaoCredito(cartao.getNumeroCartao(), cartao.getSenha(), cartao.isStatus(), novoLimite);
+                    novoCartao = new CartaoCredito(cartao.getNumeroCartao(), cartao.getSenha(), cartao.isAtivo(), novoLimite);
                 } else {
                     double novoLimiteDiario = Double.parseDouble(solicitarEntrada("Digite o novo limite diário: "));
-                    novoCartao = new CartaoDebito(cartao.getNumeroCartao(), cartao.getSenha(), cartao.isStatus(), novoLimiteDiario);
+                    novoCartao = new CartaoDebito(cartao.getNumeroCartao(), cartao.getSenha(), cartao.isAtivo(), novoLimiteDiario);
                 }
                 
                 novoCartao.setId(cartao.getId());
@@ -175,19 +178,25 @@ public class CartaoServices {
     // Remover um cartão pelo ID
     public void removerCartao() { 
         int escolhaID = Integer.parseInt(solicitarEntrada("Qual o ID do cartao buscado: "));
-        sc.nextLine();
+
         cartaoDao.removerCartao(escolhaID);
     }
 
     public void efetuadoPagamento() {
+        double valorPagamento = Double.parseDouble(solicitarEntrada("Qual o valor do pagamento: "));
         
-        double escolhaID = Double.parseDouble("Qual o valor do pagamento: ");
-        sc.nextLine();
-        Cartao cartao = null;
-        cartao.efetuarPagamento(escolhaID);
+        int idCartao = Integer.parseInt(solicitarEntrada("Digite o ID do cartão: "));
+        
+        Cartao cartao = cartaoDao.buscarCartaoPorId(idCartao);
+        
+        if (cartao == null) {
+            System.out.println("Erro: Cartão não encontrado.");
+            return;
+        }
+    
+        cartao.efetuarPagamento(valorPagamento);
     }
-
-
+    
     //-------------------------------
 
     // Método para alterar a senha do cartão
@@ -230,4 +239,4 @@ public class CartaoServices {
             System.out.println("Erro: ID inválido. Digite um número válido.");
         }
     }
-}
+ }

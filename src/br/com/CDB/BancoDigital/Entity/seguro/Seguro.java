@@ -1,8 +1,9 @@
-package br.com.CDB.BancoDigital.Entity.seguro;
+package br.com.CDB.BancoDigital.entity.seguro;
 
 
 import java.time.LocalDate;
-import br.com.CDB.BancoDigital.Entity.cartao.Cartao;
+
+import br.com.CDB.BancoDigital.entity.cartao.Cartao;
 
 public abstract class Seguro {
     protected int id;
@@ -10,8 +11,11 @@ public abstract class Seguro {
     protected LocalDate dataContratacao;
     protected double valorApolice;
     protected Cartao cartaoAssociado;
+    protected boolean ativo;
 
-    public Seguro(){}
+    public Seguro(){
+        this.ativo = true;
+    }
     
     public Seguro(int id,String numeroAPolice, LocalDate dataContratacao,  double valorApolice, Cartao cartaoAssociado) {
         this.numeroAPolice = numeroAPolice;
@@ -22,8 +26,13 @@ public abstract class Seguro {
         }
     }
 
+
+    public void inativar() {
+        this.ativo = false;
+    }
+
     public abstract void contratarSeguro();
-    public abstract void gerarApolice();
+    public abstract void gerarApolice();    
 
     public int getId() {
         return id;
@@ -68,13 +77,19 @@ public abstract class Seguro {
         this.valorApolice = valorApolice;
     }
 
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }
+
     @Override
     public String toString() {
         String cartaoInfo = (cartaoAssociado != null) ? Integer.toString(cartaoAssociado.getNumeroCartao()) : "N/A";
         return "Seguro [id=" + id + ", numeroAPolice=" + numeroAPolice + ", dataContratacao=" + dataContratacao
-                + ", valorApolice=" + valorApolice + ", cartaoAssociado=" + cartaoInfo + "]";
+                + ", valorApolice=" + valorApolice + ", Numero do Cartao=" + cartaoInfo + "]";
     }
-
-    
 
 }
