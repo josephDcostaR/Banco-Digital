@@ -1,5 +1,6 @@
 package br.com.CDB.BancoDigital.services;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -99,7 +100,12 @@ public class CartaoServices {
 
     // Listar todos os cartões
     public void exibirCartoes() {
-        System.out.println(cartaoDao.listarCartoes());
+        try {
+            List<Cartao> clientes = cartaoDao.listarCartoes();
+            System.out.println(clientes);
+        } catch (IllegalStateException e) {
+            System.out.println("Nenhum cartao foi cadastrado ainda. Cadastre um cartao antes de tentar visualizar a lista.");
+        }
     }
 
     // Atualizar um cartão
@@ -174,12 +180,18 @@ public class CartaoServices {
         System.out.println("Cartão atualizado com sucesso!");
     }
     
-
     // Remover um cartão pelo ID
-    public void removerCartao() { 
-        int escolhaID = Integer.parseInt(solicitarEntrada("Qual o ID do cartao buscado: "));
-
-        cartaoDao.removerCartao(escolhaID);
+    public void removerCartao() {
+        int escolhaId = Integer.parseInt(solicitarEntrada("Qual o ID do cartao buscado: "));
+        System.out.println("Tem certeza que deseja desligar esse cartao? (S/N)");
+        String confirmacao = sc.nextLine().trim().toUpperCase();
+    
+        if (confirmacao.equals("S")) {
+            cartaoDao.removerCartao(escolhaId);;
+            System.out.println("Cliente desligado com sucesso!");
+        } else {
+            System.out.println("Operação cancelada.");
+        }
     }
 
     public void efetuadoPagamento() {

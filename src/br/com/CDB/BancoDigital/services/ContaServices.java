@@ -1,6 +1,7 @@
 package br.com.CDB.BancoDigital.services;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -81,7 +82,12 @@ public class ContaServices {
     }
 
     public void exibirContas() {
-        System.out.println(contaDao.listarTodasAsContas());
+        try {
+            List<Conta> contas = contaDao.listarTodasAsContas();
+            System.out.println(contas);
+        } catch (IllegalStateException e) {
+            System.out.println("Nenhuma conta foi cadastrado ainda. Cadastre um conta antes de tentar visualizar a lista.");
+        }
     }
 
      // Método para atualizar uma conta
@@ -149,11 +155,18 @@ public class ContaServices {
     }
 
 
-    
+
     public void deletarConta() {
-        int escolhaId = Integer.parseInt(solicitarEntrada("Qual o ID da conta buscada: "));
-        clienteDao.removerCliente(escolhaId);
-        System.out.println("Conta desliga com sucesso!");
+        int escolhaId = Integer.parseInt(solicitarEntrada("Qual o ID da conta buscado: "));
+        System.out.println("Tem certeza que deseja desligar essa conta? (S/N)");
+        String confirmacao = sc.nextLine().trim().toUpperCase();
+    
+        if (confirmacao.equals("S")) {
+            contaDao.removerConta(escolhaId);
+            System.out.println("Conta desligado com sucesso!");
+        } else {
+            System.out.println("Operação cancelada.");
+        }
     }
 
     public void exibirSaldos() {

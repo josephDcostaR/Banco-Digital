@@ -22,7 +22,7 @@ public class CartaoView {
 
     public void menuCartao() {
         System.out.println("""
-                 Menu do Cartao:
+                 === Menu do Cartao ===
                  1 - Cadastrar Cartao
                  2 - Alterar Senha
                  3 - Ativar Cartao

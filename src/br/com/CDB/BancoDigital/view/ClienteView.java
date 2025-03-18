@@ -23,7 +23,7 @@ public class ClienteView {
 
     public void menuCliente() {
         System.out.println("""
-                 Menu do Cliente:
+                 === Menu do Cliente ===
                  1 - Cadastrar Cliente
                  2 - Buscar Cliente por Id
                  3 - Exibir todos os clientes
@@ -55,6 +55,7 @@ public class ClienteView {
                         break;
                     case 4:
                         clienteServices.atualizarCliente();
+                        break;
                     case 5:
                         clienteServices.deletarCliente();
                         break;
@@ -67,7 +68,6 @@ public class ClienteView {
                 System.out.println("\nPressione Enter para continuar...");
                 sc.nextLine();
         }
-         
     }
 
     private void limparConsole() {

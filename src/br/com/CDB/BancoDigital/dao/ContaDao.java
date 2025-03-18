@@ -47,21 +47,40 @@ public class ContaDao {
         return listaDeContas;
     }
 
+
+    
     public Conta buscarContaPorId(int id) {
-        for (Conta conta : listaDeContas) {
-            if (conta.getIdCliente() == id) {
-                return conta;
+        if (listaDeContas.isEmpty()) {
+            System.out.println("Nenhum cliente cadastrado no momento.");
+            return null;
+        }
+
+        for (Conta c : listaDeContas) {
+            if (c.getIdCliente() == id) {
+                return c;
             }
         }
+    
+        System.out.println("Conta com ID " + id + " não encontrado.");
         return null;
     }
 
-    public Conta listarTodasAsContas() {
-        verificarContas();
-        for(Conta c : listaDeContas){
-            return c;
+   
+
+    public List<Conta>  listarTodasAsContas() {
+        if (listaDeContas.isEmpty()) {
+            System.out.println("Nenhuma conta cadastrado no momento.");
+            return new ArrayList<>(); // Retorna uma lista vazia ao invés de lançar exceção
         }
-        return null;
+    
+        List<Conta> contasAtivos = new ArrayList<>();
+        for (Conta c : listaDeContas) {
+            if (c.isAtiva()) {
+                contasAtivos.add(c);
+            }
+        }
+    
+        return  contasAtivos;
     }
 
     public boolean atualizarConta(Conta contaAtualizada) {
@@ -73,14 +92,18 @@ public class ContaDao {
         }
         return false;
     }
-    
+
+
     public void removerConta(int id) {
-        verificarContas();
         Conta conta = buscarContaPorId(id);
-        if (conta != null) {
-            conta.inativar();
-            System.out.println("conta desligada com sucesso!");
+    
+        if (conta == null) {
+            System.out.println("Não foi possível remover. Conta não encontrado.");
+            return;
         }
+    
+        conta.inativar();
+        System.out.println("Conta desligado com sucesso!");        
     }
 
     public void revelarSaldoDaConta() {
@@ -93,9 +116,4 @@ public class ContaDao {
         }
     }
 
-    private void verificarContas() {
-        if (listaDeContas.isEmpty()) {
-            throw new IllegalStateException("Não há contas cadastrados!");
-        }
-    }
 }

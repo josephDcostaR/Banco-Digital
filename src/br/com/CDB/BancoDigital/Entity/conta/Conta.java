@@ -99,6 +99,14 @@ public abstract class Conta {
         this.cartoes = cartoes;
     }
 
+    public boolean isAtiva() {
+        return ativa;
+    }
+
+    public void setAtiva(boolean ativa) {
+        this.ativa = ativa;
+    }
+
     
 
     @Override
@@ -106,6 +114,8 @@ public abstract class Conta {
         String clienteInfo = (clienteAssociado != null) ? clienteAssociado.getNome() : "N/A";
         return "Conta [Id=" + IdCliente + ", numeroDaConta=" + numeroDaConta + ", saldo=" + saldo + ", clienteAssociado=" + clienteInfo + "]";
     }
+
+ 
 
    
 }

@@ -32,21 +32,35 @@ public class CartaoDao {
     }
 
     public Cartao buscarCartaoPorId(int id) {
-        for (Cartao cartao : listaDeCartoes) {
-            if (cartao.getId() == id && cartao.isAtivo()) {
-                return cartao;
-            }
+        if (listaDeCartoes.isEmpty()) {
+            System.out.println("Nenhum cartao cadastrado no momento.");
+            return null;
         }
-        return null;
-    }
-
-    public Cartao listarCartoes() {
+    
         for (Cartao c : listaDeCartoes) {
-            if (c.isAtivo()) {
+            if (c.getId() == id) {
                 return c;
             }
         }
+    
+        System.out.println("Cartao com ID " + id + " não encontrado.");
         return null;
+    }
+
+    public List<Cartao> listarCartoes() {
+        if (listaDeCartoes.isEmpty()) {
+            System.out.println("Nenhum cartao cadastrado no momento.");
+            return new ArrayList<>(); // Retorna uma lista vazia ao invés de lançar exceção
+        }
+    
+        List<Cartao> cartoesAtivos = new ArrayList<>();
+        for (Cartao c : listaDeCartoes) {
+            if (c.isAtivo()) {
+                cartoesAtivos.add(c);
+            }
+        }
+    
+        return cartoesAtivos;
     }
 
     public int getTotalCartao() {
@@ -64,18 +78,17 @@ public class CartaoDao {
     }
 
     public void removerCartao(int id) {
-        verificarListaClientes();
         Cartao cartao = buscarCartaoPorId(id);
-        if (cartao != null) {
-            cartao.inativar();
-            System.out.println("Cartão desligado com sucesso!");
+    
+        if (cartao == null) {
+            System.out.println("Não foi possível remover. Cartao não encontrado.");
+            return;
         }
+    
+        cartao.inativar();
+        System.out.println("Cartao desligado com sucesso!");
        
     }
 
-    private void verificarListaClientes() {
-        if (listaDeCartoes.isEmpty()) {
-            throw new IllegalStateException("Não há clientes cadastrados!");
-        }
-    }
+  
 }

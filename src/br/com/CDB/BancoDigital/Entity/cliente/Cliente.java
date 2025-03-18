@@ -21,25 +21,28 @@ public class Cliente {
     }
 
     // Construtor que recebe também uma conta (usa o construtor padrão para inicializar 'contas')
-    public Cliente(String CPF, String nome, LocalDate dataDeNascimento, String endereco, CategoriaCliente categoriaCliente, Conta conta) {
+    public Cliente(String CPF, String nome, LocalDate dataDeNascimento, String endereco, CategoriaCliente categoriaCliente,  Conta conta) {
         this();
         this.CPF = CPF;
         this.nome = nome;
         this.dataDeNascimento = dataDeNascimento;
         this.endereco = endereco;
         this.categoriaCliente = categoriaCliente;
+        
         if(conta != null) {
             this.adicionarConta(conta);
         }
+   
     }
 
-    public Cliente(String CPF, String nome, LocalDate dataDeNascimento, String endereco, CategoriaCliente categoriaCliente) {
+    public Cliente(String CPF, String nome, LocalDate dataDeNascimento, String endereco, CategoriaCliente categoriaCliente,  boolean ativo) {
             this(); // chama o construtor padrão para inicializar a lista
             this.CPF = CPF;
             this.nome = nome;
             this.dataDeNascimento = dataDeNascimento;
             this.endereco = endereco;
             this.categoriaCliente = categoriaCliente;
+            this.ativo = ativo;
     }
 
     //Cria a relação Cliente 1.* Contas

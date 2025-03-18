@@ -26,11 +26,11 @@ public class MenuView {
                  limparConsole();
 
                  System.out.println("""
-                         Banco Digital CVV:
+                         === Banco Digital CVV ===
                          1 - Acessar Menu Cliente
                          2 - Acessar Menu Conta
                          3 - Acessar Menu Cartão
-                         4 - Acessar Menu Cartão
+                         4 - Acessar Menu Seguro
                          5 - Sair
                          """);
                  

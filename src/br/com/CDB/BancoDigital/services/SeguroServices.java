@@ -3,9 +3,9 @@ package br.com.CDB.BancoDigital.services;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
-
 import br.com.CDB.BancoDigital.dao.CartaoDao;
 import br.com.CDB.BancoDigital.dao.SeguroDao;
 import br.com.CDB.BancoDigital.entity.cartao.Cartao;
@@ -115,6 +115,12 @@ public class SeguroServices {
     // Método para listar todos os seguros
     public void listarSeguros() {
       System.out.println(seguroDao.listarSeguros());
+        try {
+            List<Seguro> seguros =seguroDao.listarSeguros();
+            System.out.println(seguros);
+        } catch (IllegalStateException e) {
+            System.out.println("Nenhum seguro foi cadastrado ainda. Cadastre um seguro antes de tentar visualizar a lista.");
+        }
     }
     
     // Método para buscar um seguro pelo ID
@@ -229,7 +235,7 @@ public class SeguroServices {
         }
         
         // Atualiza o seguro no DAO
-        boolean atualizado = seguroDao.atualizarCartao(seguro);
+        boolean atualizado = seguroDao.atualizarSeguro(seguro);
         if (atualizado) {
             System.out.println("Seguro atualizado com sucesso!");
         } else {
@@ -239,14 +245,15 @@ public class SeguroServices {
 
     // Método para remover um seguro pelo ID
     public void removerSeguro() {
-        int id;
-        try {
-            id = Integer.parseInt(solicitarEntrada("Digite o ID do seguro a ser removido: "));
-            seguroDao.removerSeguroPorId(id);
-            System.out.println("Seguro Desligado");
-        } catch (NumberFormatException e) {
-            System.out.println("ID inválido.");
-            return;
+        int escolhaId = Integer.parseInt(solicitarEntrada("Qual o ID do seguro buscado: "));
+        System.out.println("Tem certeza que deseja desligar esse seguro? (S/N)");
+        String confirmacao = sc.nextLine().trim().toUpperCase();
+    
+        if (confirmacao.equals("S")) {
+            seguroDao.removerSeguroPorId(escolhaId);
+            System.out.println("Cliente desligado com sucesso!");
+        } else {
+            System.out.println("Operação cancelada.");
         }
     }
 

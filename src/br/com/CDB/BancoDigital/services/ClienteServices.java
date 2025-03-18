@@ -4,6 +4,7 @@ import java.util.Scanner;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 import java.util.Locale;
 
 import br.com.CDB.BancoDigital.dao.ClienteDao;
@@ -60,7 +61,7 @@ public class ClienteServices {
                 return;
             }
            
-            Cliente cliente = new Cliente(cpf, nome, dataNascimento, endereco, categoria);
+            Cliente cliente = new Cliente(cpf, nome, dataNascimento, endereco, categoria,true);
             clienteDao.registrarClientes(cliente);
             System.out.println("Cliente cadastrado com sucesso!");
             
@@ -113,10 +114,21 @@ public class ClienteServices {
         
     }
 
-    public void buscarCliente() {
-        int escolhaId = Integer.parseInt("Qual o ID do cliente buscado: ");
-        System.out.println(clienteDao.encontraClientePorId(escolhaId));
+    public void buscarCliente() { 
+        try {
+            int escolhaId = Integer.parseInt(solicitarEntrada("Qual o ID do cliente buscado: "));
+            Cliente cliente = clienteDao.encontraClientePorId(escolhaId);
+            
+            if (cliente != null) {
+                System.out.println("Cliente encontrado: " + cliente);
+            } else {
+                System.out.println("Cliente não encontrado.");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Erro: O ID deve ser um número inteiro válido.");
+        }
     }
+    
 
     // Atualizar um cartão
     public void atualizarCliente() {
@@ -184,19 +196,33 @@ public class ClienteServices {
                 return;
         }
     
-        clienteDao.atualizarCartao(cliente);
+        clienteDao.atualizarCliente(cliente);
         System.out.println("Cartão atualizado com sucesso!");
     }
 
     public void exibirClientes() {
-        System.out.println(clienteDao.listarClientes());
+        try {
+            List<Cliente> clientes = clienteDao.listarClientes();
+            System.out.println(clientes);
+        } catch (IllegalStateException e) {
+            System.out.println("Nenhum cliente foi cadastrado ainda. Cadastre um cliente antes de tentar visualizar a lista.");
+        }
     }
+    
 
     public void deletarCliente() {
         int escolhaId = Integer.parseInt(solicitarEntrada("Qual o ID do cliente buscado: "));
-        clienteDao.removerCliente(escolhaId);
-        System.out.println("Cliente desliga com sucesso!");
+        System.out.println("Tem certeza que deseja desligar esse cliente? (S/N)");
+        String confirmacao = sc.nextLine().trim().toUpperCase();
+    
+        if (confirmacao.equals("S")) {
+            clienteDao.removerCliente(escolhaId);
+            System.out.println("Cliente desligado com sucesso!");
+        } else {
+            System.out.println("Operação cancelada.");
+        }
     }
+    
 
     // Método para fechar o scanner (deve ser chamado antes de encerrar o programa)
     public void fecharScanner() {

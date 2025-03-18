@@ -29,28 +29,39 @@ public class ClienteDao {
     }
 
     public Cliente encontraClientePorId(int id) {
-        verificarListaClientes();
-        for(Cliente c : clientes) {
+        if (clientes.isEmpty()) {
+            System.out.println("Nenhum cliente cadastrado no momento.");
+            return null;
+        }
+    
+        for (Cliente c : clientes) {
             if (c.getId() == id) {
                 return c;
             }
         }
+    
+        System.out.println("Cliente com ID " + id + " não encontrado.");
         return null;
     }
 
-    public Cliente listarClientes() {
-        verificarListaClientes();
-        for(Cliente c : clientes) {
+    public List<Cliente> listarClientes() {
+        if (clientes.isEmpty()) {
+            System.out.println("Nenhum cliente cadastrado no momento.");
+            return new ArrayList<>(); // Retorna uma lista vazia ao invés de lançar exceção
+        }
+    
+        List<Cliente> clientesAtivos = new ArrayList<>();
+        for (Cliente c : clientes) {
             if (c.isAtivo()) {
-                return c;
+                clientesAtivos.add(c);
             }
         }
-
-        return null;
+    
+        return clientesAtivos;
     }
 
     
-    public boolean atualizarCartao(Cliente cartaoAtualizado) {
+    public boolean atualizarCliente(Cliente cartaoAtualizado) {
         for (int i = 0; i < clientes.size(); i++) {
             if (clientes.get(i).getId() == cartaoAtualizado.getId()) {
                 clientes.set(i, cartaoAtualizado);
@@ -65,19 +76,17 @@ public class ClienteDao {
     }
     
     public void removerCliente(int id) {
-        verificarListaClientes();
         Cliente cliente = encontraClientePorId(id);
-        if (cliente != null) {
-            cliente.inativar();
-            System.out.println("Cliente desligado com sucesso!");        
+    
+        if (cliente == null) {
+            System.out.println("Não foi possível remover. Cliente não encontrado.");
+            return;
         }
-        
+    
+        cliente.inativar();
+        System.out.println("Cliente desligado com sucesso!");        
     }
     
+    
 
-    private void verificarListaClientes() {
-        if (clientes.isEmpty()) {
-            throw new IllegalStateException("Não há clientes cadastrados!");
-        }
-    }
 }    

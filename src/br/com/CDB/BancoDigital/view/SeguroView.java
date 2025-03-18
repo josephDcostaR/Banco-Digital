@@ -22,7 +22,7 @@ public class SeguroView {
 
     public void menuSeguro() {
         System.out.println("""
-                 Menu do Seguro:
+                 === Menu do Seguro ===
                  1 - Cadastrar Seguro
                  2 - Contratar Seguro
                  3 - Gerar Apolice
