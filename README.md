@@ -38,7 +38,6 @@ O objetivo é aplicar conceitos de **orientação a objetos**, **persistência d
 ┃ ┣ 📂 validations  # Classes de validação de dados e regras de negócio  
 ┃ ┗ 📂 services     # Lógica de negócios e manipulação de dados  
 ┣ 📄 README.md      # Documentação do projeto  
-┣ 📄 pom.xml        # Arquivo de configuração do Maven (se aplicável)  
 ```
 
 ---
