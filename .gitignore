@@ -1,0 +1,49 @@
+# 🚀 Arquivo .gitignore para Java Vanilla + VS Code
+
+# 🔹 Arquivos de build e compilação
+bin/
+*.class
+*.jar
+*.war
+*.ear
+
+# 🔹 Configurações do VS Code
+.vscode/
+*.code-workspace
+
+# 🔹 Dependências do Maven (se aplicável)
+.mvn/
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+dependency-reduced-pom.xml
+release.properties
+
+# 🔹 Dependências do Gradle (se aplicável)
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# 🔹 Arquivos de log e temporários
+*.log
+hs_err_pid*.log
+*.tmp
+*.swp
+*.swo
+
+# 🔹 Arquivos de configuração do sistema operacional
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 🔹 Arquivos de cache do Git
+*.orig
+
+# 🔹 Arquivos de IDEs (caso use outras além do VS Code)
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# 🔹 Arquivos de configuração de ambiente
+.env
