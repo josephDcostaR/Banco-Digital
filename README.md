@@ -1,4 +1,4 @@
-## 📌 Projeto Banco Digital  
+## 📌 Projeto Banco Digital CVV 
 
 Este projeto é uma simulação de um banco digital desenvolvida em **Java Vanilla**, utilizando a arquitetura **MVC (Model-View-Controller)**.  
 O objetivo é aplicar conceitos de **orientação a objetos**, **persistência de dados** e **boas práticas de programação**.  
